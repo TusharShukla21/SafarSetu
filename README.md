@@ -31,7 +31,7 @@ The application starts at `http://127.0.0.1:5000/`.
 
 ## Configuration
 
-`SECRET_KEY` and `WEATHER_API_KEY` are loaded from environment variables. Never commit `.env` or API keys to the repository.
+`SECRET_KEY` and `WEATHER_API_KEY` are loaded from environment variables. 
 
 ## Team
 
