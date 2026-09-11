@@ -1,0 +1,1092 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+{% if session.get('role') == 'business' %}
+
+<!-- =====================================================
+     BUSINESS HOME
+     ===================================================== -->
+
+<section class="home-hero">
+
+    <div class="home-hero-container">
+
+        <div class="home-hero-content">
+
+            <span class="hero-eyebrow">
+                ✦ SAFAR SETU FOR BUSINESS
+            </span>
+
+            <h1>
+                Grow your
+                <span>tourism business.</span>
+            </h1>
+
+            <p>
+                Add your tourism business, manage your services
+                and packages, and help travellers discover
+                what you offer through Safar Setu.
+            </p>
+
+            <div class="hero-actions">
+
+                <a
+                    href="{{ url_for('add_business') }}"
+                    class="btn btn-primary"
+                >
+                    Add a Business
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="{{ url_for('business') }}"
+                    class="btn btn-outline"
+                >
+                    My Business
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Business visual -->
+
+        <div class="hero-visual">
+
+            <div class="hero-card hero-card-main">
+
+                <div class="hero-card-top">
+
+                    <span>
+                        Your business
+                    </span>
+
+                    <span class="hero-card-icon">
+                        🏪
+                    </span>
+
+                </div>
+
+                <div class="hero-destination">
+
+                    <div class="destination-dot"></div>
+
+                    <div>
+
+                        <strong>
+                            Reach Travellers
+                        </strong>
+
+                        <small>
+                            Showcase your services
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="hero-stats">
+
+                    <div>
+                        <strong>∞</strong>
+                        <small>Customers</small>
+                    </div>
+
+                    <div>
+                        <strong>24/7</strong>
+                        <small>Visibility</small>
+                    </div>
+
+                    <div>
+                        <strong>1</strong>
+                        <small>Platform</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS QUICK ACTIONS
+     ===================================================== -->
+
+<section class="home-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    MANAGE YOUR BUSINESS
+                </span>
+
+                <h2>
+                    Everything you need in one place
+                </h2>
+
+            </div>
+
+            <p>
+                Manage your tourism listings and keep your
+                business information useful for travellers.
+            </p>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+            <!-- My Business -->
+
+            <a
+                href="{{ url_for('business') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    🏪
+                </div>
+
+                <div>
+
+                    <h3>
+                        My Business
+                    </h3>
+
+                    <p>
+                        View and manage your listed tourism
+                        businesses.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Add Business -->
+
+            <a
+                href="{{ url_for('add_business') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    ➕
+                </div>
+
+                <div>
+
+                    <h3>
+                        Add Business
+                    </h3>
+
+                    <p>
+                        List your hotel, hostel, restaurant,
+                        agency, taxi or other service.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Business Packages -->
+
+            <a
+                href="{{ url_for('business') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    🎒
+                </div>
+
+                <div>
+
+                    <h3>
+                        Manage Packages
+                    </h3>
+
+                    <p>
+                        Add and manage travel packages,
+                        dates, prices and availability.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Emergency -->
+
+            <a
+                href="{{ url_for('emergency') }}"
+                class="quick-card quick-card-emergency"
+            >
+
+                <div class="quick-icon">
+                    🆘
+                </div>
+
+                <div>
+
+                    <h3>
+                        Emergency Help
+                    </h3>
+
+                    <p>
+                        Quickly access important emergency
+                        contacts while travelling.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS INFORMATION
+     ===================================================== -->
+
+<section class="home-section destinations-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    HELP TRAVELLERS DISCOVER YOU
+                </span>
+
+                <h2>
+                    Make your business visible
+                </h2>
+
+            </div>
+
+            <p>
+                Keep your business information accurate so
+                travellers can make better decisions.
+            </p>
+
+        </div>
+
+
+        <div class="destination-grid">
+
+            <article class="destination-card">
+
+                <div class="destination-image">
+
+                    <div class="destination-image-placeholder">
+                        📍
+                    </div>
+
+                    <span class="destination-country">
+                        LOCATION
+                    </span>
+
+                </div>
+
+                <div class="destination-content">
+
+                    <span class="destination-state">
+                        BUSINESS INFORMATION
+                    </span>
+
+                    <h3>
+                        Add Your Location
+                    </h3>
+
+                    <p>
+                        Help travellers know where your
+                        business is located and how to reach it.
+                    </p>
+
+                    <div class="destination-actions">
+
+                        <a
+                            href="{{ url_for('add_business') }}"
+                            class="destination-link"
+                        >
+                            Add Business
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="destination-card">
+
+                <div class="destination-image">
+
+                    <div class="destination-image-placeholder">
+                        💰
+                    </div>
+
+                    <span class="destination-country">
+                        PRICING
+                    </span>
+
+                </div>
+
+                <div class="destination-content">
+
+                    <span class="destination-state">
+                        SERVICES & PRICES
+                    </span>
+
+                    <h3>
+                        Show Your Services
+                    </h3>
+
+                    <p>
+                        Provide useful pricing and service
+                        information to help travellers compare.
+                    </p>
+
+                    <div class="destination-actions">
+
+                        <a
+                            href="{{ url_for('business') }}"
+                            class="destination-link"
+                        >
+                            Manage Listing
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="destination-card">
+
+                <div class="destination-image">
+
+                    <div class="destination-image-placeholder">
+                        📅
+                    </div>
+
+                    <span class="destination-country">
+                        PACKAGES
+                    </span>
+
+                </div>
+
+                <div class="destination-content">
+
+                    <span class="destination-state">
+                        TRAVEL PACKAGES
+                    </span>
+
+                    <h3>
+                        Offer Travel Packages
+                    </h3>
+
+                    <p>
+                        Add package dates, prices, inclusions,
+                        exclusions and booking deadlines.
+                    </p>
+
+                    <div class="destination-actions">
+
+                        <a
+                            href="{{ url_for('business') }}"
+                            class="destination-link"
+                        >
+                            Manage Packages
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS BENEFITS
+     ===================================================== -->
+
+<section class="home-section features-section">
+
+    <div class="container">
+
+        <div class="feature-banner">
+
+            <div class="feature-banner-content">
+
+                <span class="section-eyebrow">
+                    WHY SAFAR SETU?
+                </span>
+
+                <h2>
+                    Connect your business with travellers.
+                </h2>
+
+                <p>
+                    Safar Setu brings tourism businesses and
+                    travellers together on one platform,
+                    making travel planning simpler for everyone.
+                </p>
+
+            </div>
+
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Simple business listing
+                        </strong>
+
+                        <p>
+                            Add your business details,
+                            location, contact information and services.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Reach more travellers
+                        </strong>
+
+                        <p>
+                            Let travellers discover your
+                            tourism services while planning trips.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Manage travel packages
+                        </strong>
+
+                        <p>
+                            Provide package dates, prices,
+                            availability and booking information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% else %}
+
+<!-- =====================================================
+     TOURIST HOME
+     ===================================================== -->
+
+<section class="home-hero">
+
+    <div class="home-hero-container">
+
+        <div class="home-hero-content">
+
+            <span class="hero-eyebrow">
+                ✦ SMART TRAVEL, SIMPLIFIED
+            </span>
+
+            <h1>
+                Where do you want
+                to <span>go?</span>
+            </h1>
+
+            <p>
+                Plan your complete journey with stays,
+                transport, places, weather, budget insights
+                and emergency assistance — all in one place.
+            </p>
+
+            <div class="hero-actions">
+
+                <a
+                    href="{{ url_for('plan_trip') }}"
+                    class="btn btn-primary"
+                >
+                    Plan a Trip
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="{{ url_for('places') }}"
+                    class="btn btn-outline"
+                >
+                    Explore Places
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Hero visual -->
+
+        <div class="hero-visual">
+
+            <div class="hero-card hero-card-main">
+
+                <div class="hero-card-top">
+
+                    <span>
+                        Your next adventure
+                    </span>
+
+                    <span class="hero-card-icon">
+                        ✈
+                    </span>
+
+                </div>
+
+                <div class="hero-destination">
+
+                    <div class="destination-dot"></div>
+
+                    <div>
+
+                        <strong>
+                            Explore India
+                        </strong>
+
+                        <small>
+                            Discover places made for you
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="hero-stats">
+
+                    <div>
+                        <strong>4</strong>
+                        <small>Destinations</small>
+                    </div>
+
+                    <div>
+                        <strong>20+</strong>
+                        <small>Experiences</small>
+                    </div>
+
+                    <div>
+                        <strong>24/7</strong>
+                        <small>Help</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUICK ACTIONS
+     ===================================================== -->
+
+<section class="home-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    EXPLORE WITH EASE
+                </span>
+
+                <h2>
+                    Everything you need for your journey
+                </h2>
+
+            </div>
+
+            <p>
+                From planning to reaching your destination,
+                Safar Setu brings the important things together.
+            </p>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+            <!-- Plan Trip -->
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    ✈
+                </div>
+
+                <div>
+
+                    <h3>
+                        Plan a Trip
+                    </h3>
+
+                    <p>
+                        Build a complete trip according
+                        to your dates and budget.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Stay -->
+
+            <a
+                href="{{ url_for('stay') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    🛏
+                </div>
+
+                <div>
+
+                    <h3>
+                        Find a Stay
+                    </h3>
+
+                    <p>
+                        Discover hotels, hostels,
+                        dormitories and homestays.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Travel -->
+
+            <a
+                href="{{ url_for('travel') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    🚆
+                </div>
+
+                <div>
+
+                    <h3>
+                        Find Transport
+                    </h3>
+
+                    <p>
+                        Compare bus, train, flight,
+                        taxi and other options.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Emergency -->
+
+            <a
+                href="{{ url_for('emergency') }}"
+                class="quick-card quick-card-emergency"
+            >
+
+                <div class="quick-icon">
+                    🆘
+                </div>
+
+                <div>
+
+                    <h3>
+                        Emergency Help
+                    </h3>
+
+                    <p>
+                        Quickly access important
+                        emergency contacts.
+                    </p>
+
+                </div>
+
+                <span class="quick-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DESTINATIONS
+     ===================================================== -->
+
+<section class="home-section destinations-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    DISCOVER INDIA
+                </span>
+
+                <h2>
+                    Popular destinations
+                </h2>
+
+            </div>
+
+            <p>
+                Start exploring some of the destinations
+                available on Safar Setu.
+            </p>
+
+        </div>
+
+
+        {% if destinations %}
+
+        <div class="destination-grid">
+
+            {% for destination in destinations %}
+
+            <article class="destination-card">
+
+                <div class="destination-image">
+
+                    <div class="destination-image-placeholder">
+                        {{ destination.name[0] }}
+                    </div>
+
+                    <span class="destination-country">
+                        {{ destination.country }}
+                    </span>
+
+                </div>
+
+
+                <div class="destination-content">
+
+                    <span class="destination-state">
+                        {{ destination.state }}
+                    </span>
+
+                    <h3>
+                        {{ destination.name }}
+                    </h3>
+
+                    <p>
+                        {{ destination.description
+                           or
+                           "Discover amazing places and experiences." }}
+                    </p>
+
+
+                    {% if destination.best_time %}
+
+                    <div class="destination-meta">
+
+                        <span>
+                            Best time:
+                        </span>
+
+                        {{ destination.best_time }}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="destination-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'places',
+                                destination=destination.name
+                            ) }}"
+                            class="destination-link"
+                        >
+                            Explore Places
+                            <span>→</span>
+                        </a>
+
+                        <a
+                            href="{{ url_for('plan_trip') }}"
+                            class="destination-plan"
+                        >
+                            Plan
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                🌍
+            </div>
+
+            <div class="empty-state-title">
+                No destinations available
+            </div>
+
+            <p>
+                Destinations will appear here soon.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURES
+     ===================================================== -->
+
+<section class="home-section features-section">
+
+    <div class="container">
+
+        <div class="feature-banner">
+
+            <div class="feature-banner-content">
+
+                <span class="section-eyebrow">
+                    WHY SAFAR SETU?
+                </span>
+
+                <h2>
+                    One platform.
+                    Your entire journey.
+                </h2>
+
+                <p>
+                    No more switching between multiple websites
+                    just to plan a trip. Safar Setu brings the
+                    important travel information together.
+                </p>
+
+            </div>
+
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Budget-aware planning
+                        </strong>
+
+                        <p>
+                            Know whether your planned trip
+                            actually fits your budget.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Smarter recommendations
+                        </strong>
+
+                        <p>
+                            Discover places based on your
+                            interests and available budget.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Travel assistance
+                        </strong>
+
+                        <p>
+                            Get transport, maps, weather and
+                            emergency information in one place.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+{% endblock %}

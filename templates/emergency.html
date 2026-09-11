@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}
+Emergency Help | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="emergency-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+        <div class="trip-page-header emergency-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    HELP WHEN YOU NEED IT
+                </span>
+
+                <h1>
+                    Emergency Help
+                </h1>
+
+                <p>
+                    Quickly find important emergency contacts
+                    and essential services while travelling.
+                </p>
+
+            </div>
+
+            <div class="emergency-header-icon">
+                🆘
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             IMPORTANT NOTICE
+        =========================================== -->
+
+        <div class="emergency-alert">
+
+            <div class="emergency-alert-icon">
+                ⚠️
+            </div>
+
+            <div>
+
+                <strong>
+                    In an immediate emergency
+                </strong>
+
+                <p>
+                    Call the appropriate emergency service
+                    immediately. Keep your location and
+                    important travel details ready.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             EMERGENCY CONTACTS
+        =========================================== -->
+
+        {% if services %}
+
+        <div class="emergency-section-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    QUICK CONTACTS
+                </span>
+
+                <h2>
+                    Emergency Numbers
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="emergency-grid">
+
+            {% for service in services %}
+
+            <article class="emergency-card">
+
+                <div class="emergency-card-top">
+
+                    <div class="emergency-service-icon">
+
+                        {% if "police" in service["category"]|lower %}
+                            🚓
+                        {% elif "ambulance" in service["category"]|lower %}
+                            🚑
+                        {% elif "fire" in service["category"]|lower %}
+                            🔥
+                        {% elif "tourist" in service["category"]|lower %}
+                            🧳
+                        {% else %}
+                            🆘
+                        {% endif %}
+
+                    </div>
+
+                    {% if service["category"] %}
+
+                    <span class="emergency-category">
+                        {{ service["category"]|title }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="emergency-card-content">
+
+                    <h3>
+                        {{ service["name"] }}
+                    </h3>
+
+                    {% if service["location"] %}
+
+                    <p class="emergency-location">
+                        📍 {{ service["location"] }}
+                    </p>
+
+                    {% endif %}
+
+                    {% if service["address"] %}
+
+                    <p class="emergency-address">
+                        {{ service["address"] }}
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="emergency-card-footer">
+
+                    {% if service["phone"] %}
+
+                    <a
+                        href="tel:{{ service['phone'] }}"
+                        class="emergency-call-btn"
+                    >
+                        <span>
+                            📞
+                        </span>
+
+                        Call {{ service["phone"] }}
+
+                    </a>
+
+                    {% endif %}
+
+
+                    {% if service["maps_url"] %}
+
+                    <a
+                        href="{{ service['maps_url'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="emergency-map-btn"
+                    >
+                        📍 Maps
+                    </a>
+
+                    {% elif service["location"] %}
+
+                    <a
+                        href="{{ url_for(
+                            'map_link',
+                            place=service['name'],
+                            location=service['location']
+                        ) }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="emergency-map-btn"
+                    >
+                        📍 Maps
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             NO SERVICES
+        =========================================== -->
+
+        <div class="emergency-empty">
+
+            <div class="emergency-empty-icon">
+                📞
+            </div>
+
+            <h2>
+                Emergency information unavailable
+            </h2>
+
+            <p>
+                Emergency service information could not
+                be loaded right now.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ==========================================
+             SAFETY TIPS
+        =========================================== -->
+
+        <div class="emergency-safety-section">
+
+            <div class="emergency-section-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        TRAVEL SAFELY
+                    </span>
+
+                    <h2>
+                        Emergency Safety Tips
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="emergency-tips-grid">
+
+                <div class="emergency-tip-card">
+
+                    <div class="emergency-tip-icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Know Your Location
+                    </h3>
+
+                    <p>
+                        Keep your hotel, accommodation or
+                        current location details available
+                        when asking for help.
+                    </p>
+
+                </div>
+
+
+                <div class="emergency-tip-card">
+
+                    <div class="emergency-tip-icon">
+                        📱
+                    </div>
+
+                    <h3>
+                        Keep Your Phone Ready
+                    </h3>
+
+                    <p>
+                        Keep your phone charged and make sure
+                        important emergency numbers are easily
+                        accessible.
+                    </p>
+
+                </div>
+
+
+                <div class="emergency-tip-card">
+
+                    <div class="emergency-tip-icon">
+                        🪪
+                    </div>
+
+                    <h3>
+                        Keep Important Documents Safe
+                    </h3>
+
+                    <p>
+                        Keep copies of your identification,
+                        tickets and other important travel
+                        documents safely available.
+                    </p>
+
+                </div>
+
+
+                <div class="emergency-tip-card">
+
+                    <div class="emergency-tip-icon">
+                        👥
+                    </div>
+
+                    <h3>
+                        Stay Connected
+                    </h3>
+
+                    <p>
+                        Inform a trusted person about your
+                        itinerary and contact them if your
+                        plans change unexpectedly.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             BACK TO TRAVEL
+        =========================================== -->
+
+        <div class="emergency-bottom-card">
+
+            <div class="emergency-bottom-icon">
+                🧭
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    TRAVEL WITH CONFIDENCE
+                </span>
+
+                <h3>
+                    Need help planning your journey?
+                </h3>
+
+                <p>
+                    Explore your destination, transport,
+                    stays and places to visit with Safar Setu.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="btn btn-primary"
+            >
+                Plan a Trip
+                <span>→</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,783 @@
+{% extends "base.html" %}
+
+{% block title %}
+Packages | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/business.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="business-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PAGE HEADER
+             ================================================= -->
+
+        <div class="business-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    TRAVEL PACKAGES
+                </span>
+
+                <h1>
+                    Manage Packages
+                </h1>
+
+                <p>
+                    Create and manage travel packages offered
+                    by your business.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('business') }}"
+                class="btn btn-secondary"
+            >
+                ← My Business
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             BUSINESS INFO
+             ================================================= -->
+
+        <div class="business-package-business-card">
+
+            <div class="business-package-business-icon">
+                🏪
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    BUSINESS
+                </span>
+
+                <h2>
+                    {{ business["name"] }}
+                </h2>
+
+                <p>
+                    {{ business["category"]|title }}
+
+                    {% if business["location"] %}
+                    · {{ business["location"] }}
+                    {% endif %}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ADD PACKAGE FORM
+             ================================================= -->
+
+        <div class="business-form-card">
+
+            <div class="business-form-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        CREATE PACKAGE
+                    </span>
+
+                    <h2>
+                        Add a Travel Package
+                    </h2>
+
+                    <p>
+                        Provide package details so travellers
+                        can understand and choose your offer.
+                    </p>
+
+                </div>
+
+                <div class="business-form-icon">
+                    🎒
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'business_packages',
+                    business_id=business['id']
+                ) }}"
+                class="business-form"
+            >
+
+                <!-- =================================================
+                     PACKAGE INFORMATION
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Package Information
+                            </h3>
+
+                            <p>
+                                Add the basic details of your
+                                travel package.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-grid">
+
+                        <!-- Package Name -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="name"
+                                class="business-form-label"
+                            >
+                                Package Name
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="business-form-control"
+                                placeholder="e.g. Goa 4 Days Beach Package"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Price -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="price"
+                                class="business-form-label"
+                            >
+                                Package Price
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                id="price"
+                                name="price"
+                                class="business-form-control"
+                                min="0"
+                                step="100"
+                                placeholder="e.g. 12000"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="description"
+                            class="business-form-label"
+                        >
+                            Package Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="business-form-control business-form-textarea"
+                            rows="5"
+                            placeholder="Describe what travellers can expect from this package..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PACKAGE DATES
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Package Dates
+                            </h3>
+
+                            <p>
+                                Specify when this package is
+                                available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-grid">
+
+                        <!-- Start Date -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="start_date"
+                                class="business-form-label"
+                            >
+                                Start Date
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="start_date"
+                                name="start_date"
+                                class="business-form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- End Date -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="end_date"
+                                class="business-form-label"
+                            >
+                                End Date
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="end_date"
+                                name="end_date"
+                                class="business-form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Available Seats -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="available_seats"
+                                class="business-form-label"
+                            >
+                                Available Seats
+                            </label>
+
+                            <input
+                                type="number"
+                                id="available_seats"
+                                name="available_seats"
+                                class="business-form-control"
+                                min="0"
+                                placeholder="e.g. 20"
+                            >
+
+                        </div>
+
+
+                        <!-- Booking Deadline -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="booking_deadline"
+                                class="business-form-label"
+                            >
+                                Booking Deadline
+                            </label>
+
+                            <input
+                                type="date"
+                                id="booking_deadline"
+                                name="booking_deadline"
+                                class="business-form-control"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     INCLUSIONS / EXCLUSIONS
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            03
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Package Includes
+                            </h3>
+
+                            <p>
+                                Clearly mention what is included
+                                and excluded from the package.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Inclusions -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="inclusions"
+                            class="business-form-label"
+                        >
+                            Inclusions
+                        </label>
+
+                        <textarea
+                            id="inclusions"
+                            name="inclusions"
+                            class="business-form-control business-form-textarea"
+                            rows="5"
+                            placeholder="e.g. Hotel stay, breakfast, sightseeing, local transport..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- Exclusions -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="exclusions"
+                            class="business-form-label"
+                        >
+                            Exclusions
+                        </label>
+
+                        <textarea
+                            id="exclusions"
+                            name="exclusions"
+                            class="business-form-control business-form-textarea"
+                            rows="5"
+                            placeholder="e.g. Flights, personal expenses, entry tickets..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     CONTACT
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            04
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Booking Contact
+                            </h3>
+
+                            <p>
+                                Tell travellers how they can
+                                contact you about this package.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="contact"
+                            class="business-form-label"
+                        >
+                            Contact Information
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact"
+                            name="contact"
+                            class="business-form-control"
+                            placeholder="e.g. +91 98765 43210 or booking@example.com"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FORM FOOTER
+                     ================================================= -->
+
+                <div class="business-form-footer">
+
+                    <div class="business-form-note">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <p>
+                            Keep package dates, prices and
+                            availability updated so travellers
+                            receive accurate information.
+                        </p>
+
+                    </div>
+
+
+                    <div class="business-form-actions">
+
+                        <a
+                            href="{{ url_for('business') }}"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Add Package
+                            <span>→</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             EXISTING PACKAGES
+             ================================================= -->
+
+        {% if packages %}
+
+        <div class="business-summary">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    YOUR PACKAGES
+                </span>
+
+                <h2>
+                    Existing Packages
+                </h2>
+
+            </div>
+
+            <div class="business-count">
+
+                <strong>
+                    {{ packages|length }}
+                </strong>
+
+                <span>
+                    package{% if packages|length != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="business-packages-list">
+
+            {% for package in packages %}
+
+            <article class="business-package-card">
+
+                <div class="business-package-header">
+
+                    <div>
+
+                        <span class="business-category">
+                            TRAVEL PACKAGE
+                        </span>
+
+                        <h3>
+                            {{ package["name"] }}
+                        </h3>
+
+                    </div>
+
+                    <div class="business-package-price">
+
+                        <span>
+                            Price
+                        </span>
+
+                        <strong>
+                            ₹{{ "{:,.0f}".format(package["price"]) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {% if package["description"] %}
+
+                <p class="business-package-description">
+                    {{ package["description"] }}
+                </p>
+
+                {% endif %}
+
+
+                <div class="business-package-details">
+
+                    <div class="business-package-detail">
+
+                        <span>
+                            📅
+                        </span>
+
+                        <div>
+
+                            <small>
+                                Dates
+                            </small>
+
+                            <strong>
+                                {{ package["start_date"] }}
+                                →
+                                {{ package["end_date"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-package-detail">
+
+                        <span>
+                            👥
+                        </span>
+
+                        <div>
+
+                            <small>
+                                Available Seats
+                            </small>
+
+                            <strong>
+                                {{ package["available_seats"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if package["booking_deadline"] %}
+
+                    <div class="business-package-detail">
+
+                        <span>
+                            ⏰
+                        </span>
+
+                        <div>
+
+                            <small>
+                                Booking Deadline
+                            </small>
+
+                            <strong>
+                                {{ package["booking_deadline"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if package["contact"] %}
+
+                    <div class="business-package-detail">
+
+                        <span>
+                            📞
+                        </span>
+
+                        <div>
+
+                            <small>
+                                Contact
+                            </small>
+
+                            <strong>
+                                {{ package["contact"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                {% if package["inclusions"] %}
+
+                <div class="business-package-section">
+
+                    <strong>
+                        ✓ Inclusions
+                    </strong>
+
+                    <p>
+                        {{ package["inclusions"] }}
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if package["exclusions"] %}
+
+                <div class="business-package-section">
+
+                    <strong>
+                        ✕ Exclusions
+                    </strong>
+
+                    <p>
+                        {{ package["exclusions"] }}
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="business-package-footer">
+
+                    <span>
+                        Package ID #{{ package["id"] }}
+                    </span>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="business-empty">
+
+            <div class="business-empty-icon">
+                🎒
+            </div>
+
+            <span class="section-eyebrow">
+                NO PACKAGES YET
+            </span>
+
+            <h2>
+                Create your first travel package
+            </h2>
+
+            <p>
+                Add package dates, pricing, availability
+                and details so travellers can discover
+                your offers.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

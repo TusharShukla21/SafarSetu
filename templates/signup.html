@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}
+Create Account | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/auth.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- Left Side -->
+
+        <div class="auth-intro">
+
+            <div class="auth-brand">
+                ✈ Safar Setu
+            </div>
+
+            <h1>
+                Start your
+                <span>journey.</span>
+            </h1>
+
+            <p>
+                Create your Safar Setu account and get
+                everything you need to plan smarter and
+                travel better.
+            </p>
+
+            <div class="auth-features">
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Personalized trip planning</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Discover places within your budget</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Compare stays and travel options</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Access emergency assistance</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Signup Card -->
+
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p>
+                    Join Safar Setu and start exploring.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('signup') }}"
+                class="auth-form"
+            >
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label
+                        for="name"
+                        class="form-label"
+                    >
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control"
+                        placeholder="Enter your name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label
+                        for="email"
+                        class="form-label"
+                    >
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label
+                        for="password"
+                        class="form-label"
+                    >
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                    <p class="form-help">
+                        Password must contain at least 6 characters.
+                    </p>
+
+                </div>
+
+
+                <!-- Confirm Password -->
+
+                <div class="form-group">
+
+                    <label
+                        for="confirm_password"
+                        class="form-label"
+                    >
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        class="form-control"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Signup Button -->
+
+                <button
+                    type="submit"
+                    class="btn btn-primary auth-submit"
+                >
+                    Create Account
+                    <span>→</span>
+                </button>
+
+            </form>
+
+
+            <!-- Login -->
+
+            <div class="auth-switch">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a
+                    href="{{ url_for('login') }}"
+                >
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

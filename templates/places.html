@@ -1,0 +1,552 @@
+{% extends "base.html" %}
+
+{% block title %}
+Places to Visit | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="places-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+        <div class="trip-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    EXPLORE DESTINATIONS
+                </span>
+
+                <h1>
+                    Places to Visit
+                </h1>
+
+                <p>
+                    Discover popular attractions, activities
+                    and experiences for your destination.
+                </p>
+
+            </div>
+
+            <div class="trip-header-icon">
+                🏛️
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             SEARCH CARD
+        =========================================== -->
+
+        <div class="trip-planner-card">
+
+            <div class="trip-card-header">
+
+                <div>
+
+                    <h2>
+                        Explore a Destination
+                    </h2>
+
+                    <p>
+                        Enter a destination to discover
+                        places worth visiting.
+                    </p>
+
+                </div>
+
+                <div class="trip-step">
+
+                    <span>
+                        01
+                    </span>
+
+                    EXPLORE
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="GET"
+                action="{{ url_for('places') }}"
+                class="trip-form places-search-form"
+            >
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="destination"
+                        >
+                            Destination
+                        </label>
+
+                        <div class="input-with-icon">
+
+                            <span class="input-icon">
+                                📍
+                            </span>
+
+                            <input
+                                type="text"
+                                id="destination"
+                                name="destination"
+                                class="form-control"
+                                value="{% if destination %}{{ destination['name'] }}{% endif %}"
+                                placeholder="e.g. Goa"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="trip-form-footer">
+
+                    <div class="trip-form-note">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <p>
+                            Explore attractions and experiences
+                            available at your destination.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary trip-submit"
+                    >
+                        Explore Places
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {% if destination %}
+
+        <!-- ==========================================
+             DESTINATION INTRO
+        =========================================== -->
+
+        <div class="places-destination-card">
+
+            <div class="places-destination-content">
+
+                <span class="section-eyebrow">
+                    YOUR DESTINATION
+                </span>
+
+                <h2>
+                    {{ destination["name"] }}
+                </h2>
+
+                {% if destination["state"] %}
+
+                <p class="places-location">
+                    📍 {{ destination["state"] }},
+                    {{ destination["country"] }}
+                </p>
+
+                {% endif %}
+
+                {% if destination["description"] %}
+
+                <p class="places-description">
+                    {{ destination["description"] }}
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+            {% if destination["best_time"] %}
+
+            <div class="places-best-time">
+
+                <span>
+                    BEST TIME TO VISIT
+                </span>
+
+                <strong>
+                    {{ destination["best_time"] }}
+                </strong>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if places %}
+
+        <!-- ==========================================
+             RESULTS HEADER
+        =========================================== -->
+
+        <div class="places-results-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    DISCOVER
+                </span>
+
+                <h2>
+                    Things to Explore
+                </h2>
+
+            </div>
+
+            <span class="places-count">
+                {{ places|length }}
+                place{% if places|length != 1 %}s{% endif %}
+            </span>
+
+        </div>
+
+
+        <!-- ==========================================
+             PLACES GRID
+        =========================================== -->
+
+        <div class="places-grid">
+
+            {% for place in places %}
+
+            <article class="place-card">
+
+                <!-- IMAGE -->
+
+                <div class="place-card-image">
+
+                    {% if place["image_url"] %}
+
+                    <img
+                        src="{{ place['image_url'] }}"
+                        alt="{{ place['name'] }}"
+                    >
+
+                    {% else %}
+
+                    <div class="place-image-placeholder">
+
+                        {% if place["category"]|lower == "beach" %}
+                            🏖️
+                        {% elif place["category"]|lower == "fort" %}
+                            🏰
+                        {% elif place["category"]|lower == "temple" %}
+                            🛕
+                        {% elif place["category"]|lower == "waterfall" %}
+                            🌊
+                        {% elif place["category"]|lower == "food" %}
+                            🍛
+                        {% elif place["category"]|lower == "adventure" %}
+                            🧗
+                        {% else %}
+                            📸
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if place["category"] %}
+
+                    <span class="place-category-badge">
+                        {{ place["category"]|title }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CONTENT -->
+
+                <div class="place-card-content">
+
+                    <div class="place-card-top">
+
+                        <div>
+
+                            <h3>
+                                {{ place["name"] }}
+                            </h3>
+
+                            {% if place["location"] %}
+
+                            <p class="place-location">
+                                📍 {{ place["location"] }}
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if place["rating"] %}
+
+                        <div class="place-rating">
+                            ★ {{ place["rating"] }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if place["description"] %}
+
+                    <p class="place-description">
+                        {{ place["description"] }}
+                    </p>
+
+                    {% endif %}
+
+
+                    <!-- PLACE INFO -->
+
+                    <div class="place-info-row">
+
+                        <div class="place-info-item">
+
+                            <span>
+                                Entry Fee
+                            </span>
+
+                            {% if place["entry_fee"] == 0 %}
+
+                            <strong class="place-free">
+                                Free
+                            </strong>
+
+                            {% else %}
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(place["entry_fee"]) }}
+                            </strong>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if place["rating"] %}
+
+                        <div class="place-info-item">
+
+                            <span>
+                                Rating
+                            </span>
+
+                            <strong>
+                                {{ place["rating"] }}/5
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="place-card-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'map_link',
+                                place=place['name'],
+                                location=place['location']
+                            ) }}"
+                            class="btn btn-secondary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View on Maps
+                            <span>↗</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ==========================================
+             EXPLORE NOTE
+        =========================================== -->
+
+        <div class="places-bottom-card">
+
+            <div class="places-bottom-icon">
+                🧭
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    PLAN SMARTER
+                </span>
+
+                <h3>
+                    Build your trip around these places
+                </h3>
+
+                <p>
+                    Use these attractions while planning your
+                    trip and choose experiences that match
+                    your interests and budget.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="btn btn-primary"
+            >
+                Plan a Trip
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             NO PLACES
+        =========================================== -->
+
+        <div class="places-empty">
+
+            <div class="places-empty-icon">
+                🗺️
+            </div>
+
+            <h2>
+                No Places Found
+            </h2>
+
+            <p>
+                We don't currently have places listed for
+                <strong>{{ destination["name"] }}</strong>.
+            </p>
+
+            <p>
+                Try another destination.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        {% else %}
+
+        <!-- ==========================================
+             INITIAL INFO
+        =========================================== -->
+
+        <div class="places-info-grid">
+
+            <div class="places-info-card">
+
+                <div class="places-info-icon">
+                    🏛️
+                </div>
+
+                <h3>
+                    Popular Attractions
+                </h3>
+
+                <p>
+                    Discover famous landmarks and
+                    must-visit attractions.
+                </p>
+
+            </div>
+
+
+            <div class="places-info-card">
+
+                <div class="places-info-icon">
+                    🎒
+                </div>
+
+                <h3>
+                    Experiences
+                </h3>
+
+                <p>
+                    Find activities, food experiences
+                    and local adventures.
+                </p>
+
+            </div>
+
+
+            <div class="places-info-card">
+
+                <div class="places-info-icon">
+                    💰
+                </div>
+
+                <h3>
+                    Budget Friendly
+                </h3>
+
+                <p>
+                    Check entry fees and choose places
+                    that fit your travel budget.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

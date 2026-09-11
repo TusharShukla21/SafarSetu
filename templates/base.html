@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        Safar Setu
+        {% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="Safar Setu - Your Smart Travel Companion"
+    >
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <!-- Page Specific CSS -->
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    <!-- =================================================
+         NAVBAR
+         ================================================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <!-- Logo -->
+
+            <a
+                href="{{ url_for('home') if session.get('user_id') else url_for('login') }}"
+                class="logo"
+            >
+
+                <span class="logo-icon">✈</span>
+
+                <span class="logo-text">
+                    Safar <span>Setu</span>
+                </span>
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            {% if session.get('user_id') %}
+
+            <nav class="nav-links">
+
+                <!-- Common -->
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="nav-link"
+                >
+                    Home
+                </a>
+
+
+                <!-- ======================================
+                     TOURIST NAVIGATION
+                     ====================================== -->
+
+                {% if session.get('role') == 'tourist' %}
+
+                <a
+                    href="{{ url_for('plan_trip') }}"
+                    class="nav-link"
+                >
+                    Plan a Trip
+                </a>
+
+                <a
+                    href="{{ url_for('my_trips') }}"
+                    class="nav-link"
+                >
+                    My Trips
+                </a>
+
+                <a
+                    href="{{ url_for('places') }}"
+                    class="nav-link"
+                >
+                    Places
+                </a>
+
+                <a
+                    href="{{ url_for('stay') }}"
+                    class="nav-link"
+                >
+                    Stay
+                </a>
+
+                <a
+                    href="{{ url_for('travel') }}"
+                    class="nav-link"
+                >
+                    Travel
+                </a>
+
+
+                <!-- ======================================
+                     BUSINESS NAVIGATION
+                     ====================================== -->
+
+                {% elif session.get('role') == 'business' %}
+
+                <a
+                    href="{{ url_for('business') }}"
+                    class="nav-link"
+                >
+                    My Business
+                </a>
+
+                <a
+                    href="{{ url_for('add_business') }}"
+                    class="nav-link"
+                >
+                    Add Business
+                </a>
+
+                {% endif %}
+
+
+                <!-- ======================================
+                     COMMON EMERGENCY
+                     ====================================== -->
+
+                <a
+                    href="{{ url_for('emergency') }}"
+                    class="nav-link emergency-link"
+                >
+                    Emergency
+                </a>
+
+            </nav>
+
+
+            <!-- ==========================================
+                 USER MENU
+                 =========================================== -->
+
+            <div class="nav-user">
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="profile-link"
+                >
+                    <span class="profile-icon">●</span>
+
+                    <span>
+                        Profile
+                    </span>
+                </a>
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="logout-btn"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         FLASH MESSAGES
+         ================================================= -->
+
+    <section class="flash-container">
+
+        {% with messages = get_flashed_messages(
+            with_categories=true
+        ) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                <div
+                    class="flash-message flash-{{ category }}"
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="flash-close"
+                        onclick="this.parentElement.remove()"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+    </section>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+         ================================================= -->
+
+    <main class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =================================================
+         FOOTER
+         ================================================= -->
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <div class="footer-logo">
+                    ✈ Safar Setu
+                </div>
+
+                <p>
+                    Plan smarter. Travel better.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a
+                    href="{{ url_for('home') if session.get('user_id') else url_for('login') }}"
+                >
+                    Home
+                </a>
+
+                {% if session.get('user_id') %}
+
+                <a href="{{ url_for('profile') }}">
+                    Profile
+                </a>
+
+                <a href="{{ url_for('emergency') }}">
+                    Emergency Help
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © {{ now().year if now is defined else 2026 }}
+                Safar Setu. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =================================================
+         JAVASCRIPT
+         ================================================= -->
+
+    <script
+        src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

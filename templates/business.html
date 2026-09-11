@@ -1,0 +1,523 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Business | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/business.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="business-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+        <div class="business-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    BUSINESS DASHBOARD
+                </span>
+
+                <h1>
+                    My Businesses
+                </h1>
+
+                <p>
+                    Manage your tourism business and help
+                    travellers discover your services.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('add_business') }}"
+                class="btn btn-primary"
+            >
+                + Add Business
+            </a>
+
+        </div>
+
+
+        {% if businesses %}
+
+        <!-- ==========================================
+             ALERTS
+        =========================================== -->
+
+        <div
+            class="business-alerts-section"
+            id="business-alerts-section"
+            hidden
+        >
+
+            <div class="business-summary">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        SMART ALERTS
+                    </span>
+
+                    <h2>
+                        Package & Availability Alerts
+                    </h2>
+
+                    <p>
+                        Important updates about your package
+                        deadlines and remaining seats.
+                    </p>
+
+                </div>
+
+                <div
+                    class="business-alert-count"
+                    id="business-alert-count"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div
+                class="business-alert-list"
+                id="business-alert-list"
+            >
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             BUSINESS SUMMARY
+        =========================================== -->
+
+        <div class="business-summary">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    YOUR LISTINGS
+                </span>
+
+                <h2>
+                    Business Listings
+                </h2>
+
+            </div>
+
+            <div class="business-count">
+
+                <strong>
+                    {{ businesses|length }}
+                </strong>
+
+                <span>
+                    listing{% if businesses|length != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             BUSINESS GRID
+        =========================================== -->
+
+        <div class="business-grid">
+
+            {% for business in businesses %}
+
+            <article class="business-card">
+
+                <!-- IMAGE -->
+
+                <div class="business-card-image">
+
+                    {% if business["image_url"] %}
+
+                    <img
+                        src="{{ business['image_url'] }}"
+                        alt="{{ business['name'] }}"
+                    >
+
+                    {% else %}
+
+                    <div class="business-image-placeholder">
+
+                        {% if business["category"]|lower == "hotel" %}
+                            🏨
+                        {% elif business["category"]|lower == "hostel" %}
+                            🎒
+                        {% elif business["category"]|lower == "restaurant" %}
+                            🍽️
+                        {% elif business["category"]|lower == "taxi" %}
+                            🚕
+                        {% elif business["category"]|lower == "transport" %}
+                            🚌
+                        {% elif business["category"]|lower == "agency" %}
+                            🧳
+                        {% elif business["category"]|lower == "homestay" %}
+                            🏡
+                        {% else %}
+                            📍
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if business["status"] %}
+
+                    <span class="business-status">
+                        {{ business["status"]|title }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CONTENT -->
+
+                <div class="business-card-content">
+
+                    <div class="business-card-top">
+
+                        <div>
+
+                            <span class="business-category">
+                                {{ business["category"]|title }}
+                            </span>
+
+                            <h3>
+                                {{ business["name"] }}
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if business["location"] %}
+
+                    <p class="business-location">
+                        📍 {{ business["location"] }}
+                    </p>
+
+                    {% endif %}
+
+
+                    {% if business["description"] %}
+
+                    <p class="business-description">
+                        {{ business["description"] }}
+                    </p>
+
+                    {% endif %}
+
+
+                    <!-- BUSINESS DETAILS -->
+
+                    <div class="business-details">
+
+                        {% if business["phone"] %}
+
+                        <div class="business-detail">
+
+                            <span>
+                                📞
+                            </span>
+
+                            <strong>
+                                {{ business["phone"] }}
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if business["email"] %}
+
+                        <div class="business-detail">
+
+                            <span>
+                                ✉️
+                            </span>
+
+                            <strong>
+                                {{ business["email"] }}
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if business["price_info"] %}
+
+                        <div class="business-detail">
+
+                            <span>
+                                💰
+                            </span>
+
+                            <strong>
+                                {{ business["price_info"] }}
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="business-card-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'edit_business',
+                                business_id=business['id']
+                            ) }}"
+                            class="btn btn-secondary"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="{{ url_for(
+                                'business_packages',
+                                business_id=business['id']
+                            ) }}"
+                            class="btn btn-primary"
+                        >
+                            Packages
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ==========================================
+             BUSINESS TIP
+        =========================================== -->
+
+        <div class="business-bottom-card">
+
+            <div class="business-bottom-icon">
+                💡
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    GROW YOUR REACH
+                </span>
+
+                <h3>
+                    Keep your business information updated
+                </h3>
+
+                <p>
+                    Accurate location, contact details,
+                    services and pricing help travellers
+                    make better decisions.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('add_business') }}"
+                class="btn btn-secondary"
+            >
+                Add Another
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             EMPTY STATE
+        =========================================== -->
+
+        <div class="business-empty">
+
+            <div class="business-empty-icon">
+                🏪
+            </div>
+
+            <span class="section-eyebrow">
+                NO BUSINESS LISTED
+            </span>
+
+            <h2>
+                Add your tourism business
+            </h2>
+
+            <p>
+                List your hotel, hostel, restaurant, taxi
+                service, travel agency, homestay or other
+                tourism service on Safar Setu.
+            </p>
+
+            <a
+                href="{{ url_for('add_business') }}"
+                class="btn btn-primary"
+            >
+                Add Your Business
+                <span>→</span>
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const alertsSection = document.getElementById(
+        "business-alerts-section"
+    );
+
+    const alertList = document.getElementById(
+        "business-alert-list"
+    );
+
+    const alertCount = document.getElementById(
+        "business-alert-count"
+    );
+
+    if (!alertsSection || !alertList || !alertCount) {
+        return;
+    }
+
+    function escapeHtml(value) {
+        const div = document.createElement("div");
+        div.textContent = value ?? "";
+        return div.innerHTML;
+    }
+
+    function getAlertIcon(type) {
+        if (type === "danger") {
+            return "!";
+        }
+
+        if (type === "warning") {
+            return "⚠";
+        }
+
+        if (type === "success") {
+            return "✓";
+        }
+
+        return "i";
+    }
+
+    function getAlertClass(type) {
+        if (
+            type === "danger" ||
+            type === "warning" ||
+            type === "success"
+        ) {
+            return "business-alert-" + type;
+        }
+
+        return "business-alert-info";
+    }
+
+    fetch("{{ url_for('business_alerts') }}")
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Could not load alerts.");
+            }
+
+            return response.json();
+        })
+        .then(function (data) {
+
+            const alerts = Array.isArray(data.alerts)
+                ? data.alerts
+                : [];
+
+            if (alerts.length === 0) {
+                return;
+            }
+
+            alertCount.textContent = alerts.length;
+            alertsSection.hidden = false;
+
+            alerts.forEach(function (alert) {
+
+                const alertCard = document.createElement("div");
+
+                alertCard.className =
+                    "business-alert " +
+                    getAlertClass(alert.type);
+
+                const title = escapeHtml(
+                    alert.title || "Business Alert"
+                );
+
+                const message = escapeHtml(
+                    alert.message || ""
+                );
+
+                alertCard.innerHTML = `
+                    <div class="business-alert-icon">
+                        ${getAlertIcon(alert.type)}
+                    </div>
+
+                    <div class="business-alert-content">
+                        <strong>${title}</strong>
+                        <p>${message}</p>
+                    </div>
+                `;
+
+                alertList.appendChild(alertCard);
+            });
+        })
+        .catch(function (error) {
+            console.log(
+                "Business alerts unavailable:",
+                error
+            );
+        });
+
+});
+</script>
+{% endblock %}

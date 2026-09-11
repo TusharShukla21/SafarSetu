@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}
+Choose Your Role | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/auth.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="role-page">
+
+        <div class="role-header">
+
+            <div class="auth-brand">
+                ✈ Safar Setu
+            </div>
+
+            <h1>
+                How will you use
+                <span>Safar Setu?</span>
+            </h1>
+
+            <p>
+                Choose an option to personalize your
+                Safar Setu experience.
+            </p>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('role') }}"
+            class="role-form"
+        >
+
+            <div class="role-options">
+
+                <!-- Tourist -->
+
+                <label class="role-card">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="tourist"
+                        required
+                    >
+
+                    <div class="role-card-content">
+
+                        <div class="role-icon">
+                            ✈
+                        </div>
+
+                        <div class="role-info">
+
+                            <h2>
+                                Tourist
+                            </h2>
+
+                            <p>
+                                Plan trips, discover places,
+                                compare stays and travel
+                                within your budget.
+                            </p>
+
+                            <div class="role-features">
+
+                                <span>
+                                    ✓ Plan Trips
+                                </span>
+
+                                <span>
+                                    ✓ Discover Places
+                                </span>
+
+                                <span>
+                                    ✓ Compare Stays
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="role-radio">
+                            ○
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- Business -->
+
+                <label class="role-card">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="business"
+                        required
+                    >
+
+                    <div class="role-card-content">
+
+                        <div class="role-icon business-icon">
+                            ◆
+                        </div>
+
+                        <div class="role-info">
+
+                            <h2>
+                                Local Business
+                            </h2>
+
+                            <p>
+                                List your business, services,
+                                prices and travel packages
+                                for tourists.
+                            </p>
+
+                            <div class="role-features">
+
+                                <span>
+                                    ✓ Add Business
+                                </span>
+
+                                <span>
+                                    ✓ Manage Services
+                                </span>
+
+                                <span>
+                                    ✓ Add Packages
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="role-radio">
+                            ○
+                        </div>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary role-submit"
+            >
+                Continue
+                <span>→</span>
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

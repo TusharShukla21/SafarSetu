@@ -1,0 +1,622 @@
+{% extends "base.html" %}
+
+{% block title %}
+Travel | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="travel-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+        <div class="trip-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    PLAN YOUR JOURNEY
+                </span>
+
+                <h1>
+                    Travel Your Way
+                </h1>
+
+                <p>
+                    Compare different ways to reach your
+                    destination and choose the option that
+                    works best for your budget and time.
+                </p>
+
+            </div>
+
+            <div class="trip-header-icon">
+                🚆
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             SEARCH CARD
+        =========================================== -->
+
+        <div class="trip-planner-card">
+
+            <div class="trip-card-header">
+
+                <div>
+
+                    <h2>
+                        Find Transport
+                    </h2>
+
+                    <p>
+                        Enter your source and destination
+                        to see available travel options.
+                    </p>
+
+                </div>
+
+                <div class="trip-step">
+
+                    <span>
+                        01
+                    </span>
+
+                    SEARCH
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="GET"
+                action="{{ url_for('travel') }}"
+                class="trip-form travel-search-form"
+            >
+
+                <div class="form-grid">
+
+                    <!-- SOURCE -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="source"
+                        >
+                            Starting Location
+                        </label>
+
+                        <div class="input-with-icon">
+
+                            <span class="input-icon">
+                                📍
+                            </span>
+
+                            <input
+                                type="text"
+                                id="source"
+                                name="source"
+                                class="form-control"
+                                value="{{ source }}"
+                                placeholder="e.g. Mumbai"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESTINATION -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="destination"
+                        >
+                            Destination
+                        </label>
+
+                        <div class="input-with-icon">
+
+                            <span class="input-icon">
+                                🧭
+                            </span>
+
+                            <input
+                                type="text"
+                                id="destination"
+                                name="destination"
+                                class="form-control"
+                                value="{{ destination }}"
+                                placeholder="e.g. Goa"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="trip-form-footer">
+
+                    <div class="trip-form-note">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <p>
+                            Compare available transport options
+                            by price, duration and availability.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary trip-submit"
+                    >
+                        Search Transport
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {% if source and destination %}
+
+        <!-- ==========================================
+             ROUTE HEADER
+        =========================================== -->
+
+        <div class="travel-route-card">
+
+            <div class="travel-route-location">
+
+                <span>
+                    FROM
+                </span>
+
+                <strong>
+                    {{ source }}
+                </strong>
+
+            </div>
+
+            <div class="travel-route-arrow">
+                →
+            </div>
+
+            <div class="travel-route-location destination">
+
+                <span>
+                    TO
+                </span>
+
+                <strong>
+                    {{ destination }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        {% if options %}
+
+        <!-- ==========================================
+             CHEAPEST OPTION
+        =========================================== -->
+
+        {% if cheapest %}
+
+        <div class="travel-cheapest-card">
+
+            <div class="travel-cheapest-icon">
+                💰
+            </div>
+
+            <div class="travel-cheapest-content">
+
+                <span class="result-card-eyebrow">
+                    BEST PRICE
+                </span>
+
+                <h2>
+                    {{ cheapest["mode"] }}
+                </h2>
+
+                <p>
+                    {{ cheapest["provider"] or "Available transport" }}
+                    {% if cheapest["duration"] %}
+                    · {{ cheapest["duration"] }}
+                    {% endif %}
+                </p>
+
+            </div>
+
+            <div class="travel-cheapest-price">
+
+                <span>
+                    Starting from
+                </span>
+
+                <strong>
+                    ₹{{ "{:,.0f}".format(cheapest["price"]) }}
+                </strong>
+
+                <small>
+                    per traveller
+                </small>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ==========================================
+             ALL OPTIONS
+        =========================================== -->
+
+        <div class="travel-results-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    AVAILABLE OPTIONS
+                </span>
+
+                <h2>
+                    Compare Your Options
+                </h2>
+
+            </div>
+
+            <span class="travel-count">
+                {{ options|length }}
+                option{% if options|length != 1 %}s{% endif %}
+            </span>
+
+        </div>
+
+
+        <div class="travel-options-grid">
+
+            {% for option in options %}
+
+            <article class="travel-card">
+
+                <div class="travel-card-header">
+
+                    <div class="travel-mode-icon">
+
+                        {% if option["mode"]|lower == "train" %}
+                            🚆
+                        {% elif option["mode"]|lower == "bus" %}
+                            🚌
+                        {% elif option["mode"]|lower == "flight" %}
+                            ✈️
+                        {% elif option["mode"]|lower == "taxi" %}
+                            🚕
+                        {% elif option["mode"]|lower == "own car" %}
+                            🚗
+                        {% else %}
+                            🛣️
+                        {% endif %}
+
+                    </div>
+
+                    <div class="travel-mode-info">
+
+                        <h3>
+                            {{ option["mode"] }}
+                        </h3>
+
+                        {% if option["provider"] %}
+
+                        <p>
+                            {{ option["provider"] }}
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="travel-card-details">
+
+                    {% if option["duration"] %}
+
+                    <div class="travel-detail">
+
+                        <span>
+                            Duration
+                        </span>
+
+                        <strong>
+                            {{ option["duration"] }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if option["availability"] %}
+
+                    <div class="travel-detail">
+
+                        <span>
+                            Availability
+                        </span>
+
+                        <strong
+                            class="
+                            {% if option['availability']|lower in
+                            ['sold out', 'unavailable', 'closed'] %}
+                            travel-unavailable
+                            {% else %}
+                            travel-available
+                            {% endif %}
+                            "
+                        >
+                            {{ option["availability"] }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if option["departure_time"] %}
+
+                    <div class="travel-detail">
+
+                        <span>
+                            Departure
+                        </span>
+
+                        <strong>
+                            {{ option["departure_time"] }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if option["arrival_time"] %}
+
+                    <div class="travel-detail">
+
+                        <span>
+                            Arrival
+                        </span>
+
+                        <strong>
+                            {{ option["arrival_time"] }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="travel-card-footer">
+
+                    <div class="travel-price">
+
+                        <span>
+                            Price / traveller
+                        </span>
+
+                        <strong>
+                            ₹{{ "{:,.0f}".format(option["price"]) }}
+                        </strong>
+
+                    </div>
+
+
+                    {% if option["booking_url"] %}
+
+                    <a
+                        href="{{ option['booking_url'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-primary travel-book-btn"
+                    >
+                        Book Now
+                        <span>↗</span>
+                    </a>
+
+                    {% else %}
+
+                    <span class="travel-no-link">
+                        Booking link unavailable
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ==========================================
+             MAP ROUTE
+        =========================================== -->
+
+        <div class="travel-map-card">
+
+            <div class="travel-map-icon">
+                🗺️
+            </div>
+
+            <div class="travel-map-content">
+
+                <span class="section-eyebrow">
+                    ROUTE
+                </span>
+
+                <h2>
+                    Need Directions?
+                </h2>
+
+                <p>
+                    Open Google Maps to view the route from
+                    {{ source }} to {{ destination }}.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for(
+                    'route_link',
+                    source=source,
+                    destination=destination,
+                    mode='driving'
+                ) }}"
+                target="_blank"
+                class="btn btn-secondary"
+            >
+                Open Maps
+                <span>↗</span>
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             NO OPTIONS
+        =========================================== -->
+
+        <div class="travel-empty">
+
+            <div class="travel-empty-icon">
+                🚧
+            </div>
+
+            <h2>
+                No Transport Options Found
+            </h2>
+
+            <p>
+                We don't currently have transport data for
+                <strong>{{ source }}</strong> to
+                <strong>{{ destination }}</strong>.
+            </p>
+
+            <p>
+                Try another route or check back when more
+                transport information is available.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        {% else %}
+
+        <!-- ==========================================
+             INITIAL INFORMATION
+        =========================================== -->
+
+        <div class="travel-info-grid">
+
+            <div class="travel-info-card">
+
+                <div class="travel-info-icon">
+                    🚆
+                </div>
+
+                <h3>
+                    Compare Transport
+                </h3>
+
+                <p>
+                    Compare trains, buses, flights,
+                    taxis and other travel options.
+                </p>
+
+            </div>
+
+
+            <div class="travel-info-card">
+
+                <div class="travel-info-icon">
+                    💰
+                </div>
+
+                <h3>
+                    Find the Best Price
+                </h3>
+
+                <p>
+                    Quickly identify the cheapest
+                    available travel option.
+                </p>
+
+            </div>
+
+
+            <div class="travel-info-card">
+
+                <div class="travel-info-icon">
+                    ⏱️
+                </div>
+
+                <h3>
+                    Check Availability
+                </h3>
+
+                <p>
+                    View duration and availability before
+                    choosing your journey.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

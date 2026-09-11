@@ -1,0 +1,599 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Business | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/business.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="business-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PAGE HEADER
+             ================================================= -->
+
+        <div class="business-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    BUSINESS LISTING
+                </span>
+
+                <h1>
+                    Edit Your Business
+                </h1>
+
+                <p>
+                    Update your business information to keep
+                    your listing accurate for travellers.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('business') }}"
+                class="btn btn-secondary"
+            >
+                ← My Business
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             EDIT FORM
+             ================================================= -->
+
+        <div class="business-form-card">
+
+            <div class="business-form-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        UPDATE DETAILS
+                    </span>
+
+                    <h2>
+                        {{ business["name"] }}
+                    </h2>
+
+                    <p>
+                        Update the information travellers will
+                        see about your business.
+                    </p>
+
+                </div>
+
+                <div class="business-form-icon">
+                    ✏️
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'edit_business',
+                    business_id=business['id']
+                ) }}"
+                class="business-form"
+            >
+
+                <!-- =================================================
+                     BASIC INFORMATION
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Basic Information
+                            </h3>
+
+                            <p>
+                                Update your business name,
+                                category and description.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-grid">
+
+                        <!-- Business Name -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="name"
+                                class="business-form-label"
+                            >
+                                Business Name
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="business-form-control"
+                                value="{{ business['name'] }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Category -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="category"
+                                class="business-form-label"
+                            >
+                                Business Category
+                                <span>*</span>
+                            </label>
+
+                            <select
+                                id="category"
+                                name="category"
+                                class="business-form-control"
+                                required
+                            >
+
+                                <option
+                                    value="hotel"
+                                    {% if business["category"] == "hotel" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Hotel
+                                </option>
+
+                                <option
+                                    value="hostel"
+                                    {% if business["category"] == "hostel" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Hostel
+                                </option>
+
+                                <option
+                                    value="dormitory"
+                                    {% if business["category"] == "dormitory" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Dormitory
+                                </option>
+
+                                <option
+                                    value="homestay"
+                                    {% if business["category"] == "homestay" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Homestay
+                                </option>
+
+                                <option
+                                    value="restaurant"
+                                    {% if business["category"] == "restaurant" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Restaurant
+                                </option>
+
+                                <option
+                                    value="agency"
+                                    {% if business["category"] == "agency" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Travel Agency
+                                </option>
+
+                                <option
+                                    value="taxi"
+                                    {% if business["category"] == "taxi" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Taxi Service
+                                </option>
+
+                                <option
+                                    value="transport"
+                                    {% if business["category"] == "transport" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Transport Service
+                                </option>
+
+                                <option
+                                    value="tour"
+                                    {% if business["category"] == "tour" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Tour / Activity
+                                </option>
+
+                                <option
+                                    value="other"
+                                    {% if business["category"] == "other" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Other Tourism Service
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="description"
+                            class="business-form-label"
+                        >
+                            Business Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="business-form-control business-form-textarea"
+                            rows="5"
+                            placeholder="Describe your business and services..."
+                        >{{ business["description"] or "" }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     LOCATION
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Location
+                            </h3>
+
+                            <p>
+                                Keep your business location
+                                information up to date.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="location"
+                            class="business-form-label"
+                        >
+                            Business Location
+                            <span>*</span>
+                        </label>
+
+                        <div class="business-input-with-icon">
+
+                            <span>
+                                📍
+                            </span>
+
+                            <input
+                                type="text"
+                                id="location"
+                                name="location"
+                                class="business-form-control"
+                                value="{{ business['location'] }}"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     CONTACT INFORMATION
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            03
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Contact Information
+                            </h3>
+
+                            <p>
+                                Update the contact details
+                                travellers can use.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="business-form-grid">
+
+                        <!-- Phone -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="phone"
+                                class="business-form-label"
+                            >
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="business-form-control"
+                                value="{{ business['phone'] or '' }}"
+                                placeholder="e.g. +91 98765 43210"
+                            >
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="email"
+                                class="business-form-label"
+                            >
+                                Business Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="business-form-control"
+                                value="{{ business['email'] or '' }}"
+                                placeholder="e.g. contact@example.com"
+                            >
+
+                        </div>
+
+
+                        <!-- Website -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="website"
+                                class="business-form-label"
+                            >
+                                Website
+                            </label>
+
+                            <input
+                                type="url"
+                                id="website"
+                                name="website"
+                                class="business-form-control"
+                                value="{{ business['website'] or '' }}"
+                                placeholder="https://example.com"
+                            >
+
+                        </div>
+
+
+                        <!-- Price -->
+
+                        <div class="business-form-group">
+
+                            <label
+                                for="price_info"
+                                class="business-form-label"
+                            >
+                                Price Information
+                            </label>
+
+                            <input
+                                type="text"
+                                id="price_info"
+                                name="price_info"
+                                class="business-form-control"
+                                value="{{ business['price_info'] or '' }}"
+                                placeholder="e.g. Rooms from ₹1500/night"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ONLINE PRESENCE
+                     ================================================= -->
+
+                <div class="business-form-section">
+
+                    <div class="business-form-section-title">
+
+                        <span class="business-form-number">
+                            04
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Online Presence
+                            </h3>
+
+                            <p>
+                                Update optional links for your
+                                business listing.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Maps URL -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="maps_url"
+                            class="business-form-label"
+                        >
+                            Google Maps Link
+                        </label>
+
+                        <input
+                            type="url"
+                            id="maps_url"
+                            name="maps_url"
+                            class="business-form-control"
+                            value="{{ business['maps_url'] or '' }}"
+                            placeholder="Paste your Google Maps link"
+                        >
+
+                    </div>
+
+
+                    <!-- Image URL -->
+
+                    <div class="business-form-group">
+
+                        <label
+                            for="image_url"
+                            class="business-form-label"
+                        >
+                            Business Image URL
+                        </label>
+
+                        <input
+                            type="url"
+                            id="image_url"
+                            name="image_url"
+                            class="business-form-control"
+                            value="{{ business['image_url'] or '' }}"
+                            placeholder="https://example.com/business-image.jpg"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FORM FOOTER
+                     ================================================= -->
+
+                <div class="business-form-footer">
+
+                    <div class="business-form-note">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <p>
+                            Your changes will be saved to your
+                            business listing.
+                        </p>
+
+                    </div>
+
+
+                    <div class="business-form-actions">
+
+                        <a
+                            href="{{ url_for('business') }}"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Save Changes
+                            <span>✓</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

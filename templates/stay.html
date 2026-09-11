@@ -1,0 +1,516 @@
+{% extends "base.html" %}
+
+{% block title %}
+Stay | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="stay-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             Page Header
+        =========================================== -->
+
+        <div class="trip-page-header">
+
+            <span class="section-eyebrow">
+                FIND YOUR STAY
+            </span>
+
+            <h1>
+                Stay Somewhere Comfortable
+            </h1>
+
+            <p>
+                Compare hotels, hostels and other stays
+                to find an option that fits your budget.
+            </p>
+
+        </div>
+
+
+        <!-- ==========================================
+             Search Form
+        =========================================== -->
+
+        <div class="trip-form-card">
+
+            <form
+                method="GET"
+                action="{{ url_for('stay') }}"
+                class="stay-search-form"
+            >
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="destination">
+                            Destination
+                        </label>
+
+                        <input
+                            type="text"
+                            id="destination"
+                            name="destination"
+                            value="{% if destination %}{{ destination['name'] }}{% endif %}"
+                            placeholder="e.g. Goa"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="budget">
+                            Maximum Price / Night
+                        </label>
+
+                        <input
+                            type="number"
+                            id="budget"
+                            name="budget"
+                            min="0"
+                            step="100"
+                            placeholder="e.g. 2000"
+                            value="{{ request.args.get('budget', '') }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Search Stays
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {% if destination %}
+
+        <!-- ==========================================
+             Destination Information
+        =========================================== -->
+
+        <div class="stay-destination-card">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    DESTINATION
+                </span>
+
+                <h2>
+                    {{ destination["name"] }}
+                </h2>
+
+                {% if destination["state"] %}
+
+                <p>
+                    {{ destination["state"] }},
+                    {{ destination["country"] }}
+                </p>
+
+                {% endif %}
+
+            </div>
+
+            {% if destination["best_time"] %}
+
+            <div class="stay-best-time">
+
+                <span>
+                    Best Time to Visit
+                </span>
+
+                <strong>
+                    {{ destination["best_time"] }}
+                </strong>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ==========================================
+             Stay Results
+        =========================================== -->
+
+        {% if stays %}
+
+        <div class="stay-results-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    STAYS
+                </span>
+
+                <h2>
+                    Recommended Stays
+                </h2>
+
+            </div>
+
+            <span class="stay-count">
+                {{ stays|length }} option{% if stays|length != 1 %}s{% endif %}
+            </span>
+
+        </div>
+
+
+        <div class="stay-grid">
+
+            {% for item in stays %}
+
+            {% set stay_data = item["stay"] %}
+            {% set offers = item["offers"] %}
+            {% set cheapest_offer = item["cheapest_offer"] %}
+
+            <article class="stay-card">
+
+                <!-- Stay Image -->
+
+                <div class="stay-card-image">
+
+                    {% if stay_data["image_url"] %}
+
+                    <img
+                        src="{{ stay_data['image_url'] }}"
+                        alt="{{ stay_data['name'] }}"
+                    >
+
+                    {% else %}
+
+                    <div class="stay-image-placeholder">
+                        🏨
+                    </div>
+
+                    {% endif %}
+
+                    <span class="stay-type-badge">
+                        {{ stay_data["type"]|title }}
+                    </span>
+
+                </div>
+
+
+                <!-- Stay Content -->
+
+                <div class="stay-card-content">
+
+                    <div class="stay-card-top">
+
+                        <div>
+
+                            <h3>
+                                {{ stay_data["name"] }}
+                            </h3>
+
+                            {% if stay_data["location"] %}
+
+                            <p class="stay-location">
+                                📍 {{ stay_data["location"] }}
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+                        {% if stay_data["rating"] %}
+
+                        <div class="stay-rating">
+                            ★ {{ stay_data["rating"] }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if stay_data["description"] %}
+
+                    <p class="stay-description">
+                        {{ stay_data["description"] }}
+                    </p>
+
+                    {% endif %}
+
+
+                    <!-- Base Price -->
+
+                    <div class="stay-price">
+
+                        <span>
+                            Starting from
+                        </span>
+
+                        <strong>
+                            ₹{{ "{:,.0f}".format(stay_data["price_per_night"]) }}
+                        </strong>
+
+                        <small>
+                            / night
+                        </small>
+
+                    </div>
+
+
+                    <!-- Price Comparison -->
+
+                    {% if offers %}
+
+                    <div class="stay-comparison">
+
+                        <div class="stay-comparison-header">
+
+                            <strong>
+                                Compare Prices
+                            </strong>
+
+                            <span>
+                                {{ offers|length }} platform{% if offers|length != 1 %}s{% endif %}
+                            </span>
+
+                        </div>
+
+
+                        <div class="stay-offers">
+
+                            {% for offer in offers %}
+
+                            <div
+                                class="
+                                    stay-offer
+                                    {% if cheapest_offer and offer['id'] == cheapest_offer['id'] %}
+                                    cheapest-offer
+                                    {% endif %}
+                                "
+                            >
+
+                                <div class="stay-offer-platform">
+
+                                    <strong>
+                                        {{ offer["platform"] }}
+                                    </strong>
+
+                                    {% if cheapest_offer and offer["id"] == cheapest_offer["id"] %}
+
+                                    <span class="cheapest-badge">
+                                        CHEAPEST
+                                    </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="stay-offer-price">
+
+                                    <strong>
+                                        ₹{{ "{:,.0f}".format(offer["price"]) }}
+                                    </strong>
+
+                                    {% if offer["booking_url"] %}
+
+                                    <a
+                                        href="{{ offer['booking_url'] }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="stay-book-btn"
+                                    >
+                                        Book
+                                    </a>
+
+                                    {% else %}
+
+                                    <span class="stay-unavailable">
+                                        Link unavailable
+                                    </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="stay-no-comparison">
+
+                        <span>
+                            Price comparison currently unavailable.
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Actions -->
+
+                    <div class="stay-card-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'map_link',
+                                place=stay_data['name'],
+                                location=stay_data['location']
+                            ) }}"
+                            class="btn btn-secondary"
+                            target="_blank"
+                        >
+                            View on Maps
+                        </a>
+
+                        <a
+                            href="{{ url_for(
+                                'stay_offers',
+                                stay_id=stay_data['id']
+                            ) }}"
+                            class="btn btn-primary"
+                        >
+                            View Details
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             No Results
+        =========================================== -->
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                🏨
+            </div>
+
+            <h2>
+                No stays found
+            </h2>
+
+            <p>
+                We couldn't find a stay matching your
+                destination and budget.
+            </p>
+
+            <p>
+                Try increasing your maximum price or
+                searching another destination.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        {% else %}
+
+        <!-- ==========================================
+             Initial State
+        =========================================== -->
+
+        <div class="stay-info-grid">
+
+            <div class="stay-info-card">
+
+                <span class="stay-info-icon">
+                    🏨
+                </span>
+
+                <h3>
+                    Hotels & Resorts
+                </h3>
+
+                <p>
+                    Find comfortable stays for every
+                    type of trip.
+                </p>
+
+            </div>
+
+
+            <div class="stay-info-card">
+
+                <span class="stay-info-icon">
+                    🎒
+                </span>
+
+                <h3>
+                    Hostels & Dormitories
+                </h3>
+
+                <p>
+                    Budget-friendly options for
+                    backpackers and groups.
+                </p>
+
+            </div>
+
+
+            <div class="stay-info-card">
+
+                <span class="stay-info-icon">
+                    💰
+                </span>
+
+                <h3>
+                    Compare Prices
+                </h3>
+
+                <p>
+                    Compare available platform prices
+                    and find the cheapest option.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

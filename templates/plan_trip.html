@@ -1,0 +1,782 @@
+{% extends "base.html" %}
+
+{% block title %}
+Plan a Trip | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="trip-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PAGE HEADER
+             ================================================= -->
+
+        <div class="trip-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    SMART TRIP PLANNER
+                </span>
+
+                <h1>
+                    Plan your
+                    <span>perfect trip.</span>
+                </h1>
+
+                <p>
+                    Tell us where you want to go, when you're
+                    travelling and your budget. We'll help you
+                    build a smarter travel plan.
+                </p>
+
+            </div>
+
+            <div class="trip-header-icon">
+                ✈
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PLANNER CARD
+             ================================================= -->
+
+        <div class="trip-planner-card">
+
+            <div class="trip-card-header">
+
+                <div>
+
+                    <h2>
+                        Tell us about your journey
+                    </h2>
+
+                    <p>
+                        Enter a few details to get personalized
+                        recommendations.
+                    </p>
+
+                </div>
+
+                <div class="trip-step">
+                    <span>01</span>
+                    Trip Details
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TRIP FORM
+                 ================================================= -->
+
+            <form
+                method="POST"
+                action="{{ url_for('plan_trip') }}"
+                class="trip-form"
+            >
+
+                <!-- =============================================
+                     LOCATION
+                     ============================================= -->
+
+                <div class="trip-form-section">
+
+                    <div class="trip-section-title">
+
+                        <span class="trip-section-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Where are you going?
+                            </h3>
+
+                            <p>
+                                Choose your starting point and destination.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <!-- Source -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="source"
+                                class="form-label"
+                            >
+                                Starting Location
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon">
+                                    📍
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="source"
+                                    name="source"
+                                    class="form-control"
+                                    placeholder="e.g. Mumbai"
+                                    autocomplete="off"
+                                    required
+                                >
+
+                            </div>
+
+                            <p class="form-help">
+                                Where will your journey start?
+                            </p>
+
+                        </div>
+
+
+                        <!-- Destination -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="destination"
+                                class="form-label"
+                            >
+                                Destination
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon">
+                                    🧭
+                                </span>
+
+                                <select
+                                    id="destination"
+                                    name="destination"
+                                    class="form-control"
+                                    required
+                                >
+
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Select a destination
+                                    </option>
+
+                                    {% for destination in destinations %}
+
+                                    <option
+                                        value="{{ destination['name'] }}"
+                                    >
+                                        {{ destination['name'] }}
+                                        {% if destination['state'] %}
+                                        — {{ destination['state'] }}
+                                        {% endif %}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+                            <p class="form-help">
+                                Choose where you want to travel.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     DATES
+                     ============================================= -->
+
+                <div class="trip-form-section">
+
+                    <div class="trip-section-title">
+
+                        <span class="trip-section-number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                When are you travelling?
+                            </h3>
+
+                            <p>
+                                Select your travel dates.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <!-- Start Date -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="start_date"
+                                class="form-label"
+                            >
+                                Start Date
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon">
+                                    📅
+                                </span>
+
+                                <input
+                                    type="date"
+                                    id="start_date"
+                                    name="start_date"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- End Date -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="end_date"
+                                class="form-label"
+                            >
+                                End Date
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon">
+                                    📅
+                                </span>
+
+                                <input
+                                    type="date"
+                                    id="end_date"
+                                    name="end_date"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     TRAVELLERS + BUDGET
+                     ============================================= -->
+
+                <div class="trip-form-section">
+
+                    <div class="trip-section-title">
+
+                        <span class="trip-section-number">
+                            03
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Set your travel budget
+                            </h3>
+
+                            <p>
+                                This helps us recommend suitable
+                                options for your trip.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <!-- Travellers -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="travellers"
+                                class="form-label"
+                            >
+                                Number of Travellers
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon">
+                                    👥
+                                </span>
+
+                                <input
+                                    type="number"
+                                    id="travellers"
+                                    name="travellers"
+                                    class="form-control"
+                                    min="1"
+                                    max="50"
+                                    value="1"
+                                    placeholder="e.g. 2"
+                                    required
+                                >
+
+                            </div>
+
+                            <p class="form-help">
+                                How many people are travelling?
+                            </p>
+
+                        </div>
+
+
+                        <!-- Budget -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="budget"
+                                class="form-label"
+                            >
+                                Total Trip Budget
+                            </label>
+
+                            <div class="input-with-icon">
+
+                                <span class="input-icon budget-icon">
+                                    ₹
+                                </span>
+
+                                <input
+                                    type="number"
+                                    id="budget"
+                                    name="budget"
+                                    class="form-control"
+                                    min="1"
+                                    step="100"
+                                    placeholder="e.g. 25000"
+                                    required
+                                >
+
+                            </div>
+
+                            <p class="form-help">
+                                Total budget for all travellers.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     INTERESTS
+                     ============================================= -->
+
+                <div class="trip-form-section">
+
+                    <div class="trip-section-title">
+
+                        <span class="trip-section-number">
+                            04
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                What do you enjoy?
+                            </h3>
+
+                            <p>
+                                Select your interests for better
+                                place recommendations.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="interest-grid">
+
+                        <!-- Beaches -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="beach"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🏖
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Beaches
+                                    </strong>
+
+                                    <small>
+                                        Relax & explore
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+
+                        <!-- Historical -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="historical"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🏛
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        History
+                                    </strong>
+
+                                    <small>
+                                        Forts & heritage
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+
+                        <!-- Nature -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="nature"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🌿
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Nature
+                                    </strong>
+
+                                    <small>
+                                        Mountains & greenery
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+
+                        <!-- Adventure -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="adventure"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🧗
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Adventure
+                                    </strong>
+
+                                    <small>
+                                        Thrills & activities
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+
+                        <!-- Food -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="food"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🍜
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Food
+                                    </strong>
+
+                                    <small>
+                                        Local cuisine
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+
+                        <!-- Culture -->
+
+                        <label class="interest-option">
+
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="culture"
+                            >
+
+                            <span class="interest-content">
+
+                                <span class="interest-icon">
+                                    🎭
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Culture
+                                    </strong>
+
+                                    <small>
+                                        Local experiences
+                                    </small>
+                                </span>
+
+                            </span>
+
+                            <span class="interest-check">
+                                ✓
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     SUBMIT AREA
+                     ============================================= -->
+
+                <div class="trip-form-footer">
+
+                    <div class="trip-form-note">
+
+                        <span>
+                            ✦
+                        </span>
+
+                        <p>
+                            We'll use your budget, interests and
+                            travel details to create personalized
+                            recommendations.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary trip-submit"
+                    >
+                        Create My Trip
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             HELPER CARDS
+             ================================================= -->
+
+        <div class="trip-helper-grid">
+
+            <div class="trip-helper-card">
+
+                <span class="trip-helper-icon">
+                    💰
+                </span>
+
+                <div>
+
+                    <h3>
+                        Budget Smart
+                    </h3>
+
+                    <p>
+                        We'll estimate major trip expenses and
+                        tell you if your budget looks realistic.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="trip-helper-card">
+
+                <span class="trip-helper-icon">
+                    📍
+                </span>
+
+                <div>
+
+                    <h3>
+                        Discover Better
+                    </h3>
+
+                    <p>
+                        Get recommendations based on your
+                        interests and available activity budget.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="trip-helper-card">
+
+                <span class="trip-helper-icon">
+                    🌦
+                </span>
+
+                <div>
+
+                    <h3>
+                        Travel Prepared
+                    </h3>
+
+                    <p>
+                        Weather, transport, maps and other useful
+                        information can be accessed from your trip.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/trip.js') }}"
+></script>
+
+{% endblock %}

@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/profile.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PROFILE HERO
+             ================================================= -->
+
+        <div class="profile-header">
+
+            <div class="profile-avatar">
+                {{ user["name"][0]|upper }}
+            </div>
+
+            <div class="profile-heading">
+
+                <span class="section-eyebrow">
+                    MY ACCOUNT
+                </span>
+
+                <h1>
+                    Welcome, {{ user["name"] }}
+                </h1>
+
+                <p>
+                    Manage your account and access your
+                    Safar Setu travel tools.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROFILE CONTENT
+             ================================================= -->
+
+        <div class="profile-grid">
+
+            <!-- =============================================
+                 ACCOUNT INFORMATION
+                 ============================================= -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+
+                    <div>
+
+                        <h2>
+                            Account Information
+                        </h2>
+
+                        <p>
+                            Your Safar Setu account details.
+                        </p>
+
+                    </div>
+
+                    <span class="profile-card-icon">
+                        👤
+                    </span>
+
+                </div>
+
+
+                <div class="profile-details">
+
+                    <!-- Name -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-info">
+
+                            <span class="profile-detail-label">
+                                Full Name
+                            </span>
+
+                            <strong>
+                                {{ user["name"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-info">
+
+                            <span class="profile-detail-label">
+                                Email Address
+                            </span>
+
+                            <strong>
+                                {{ user["email"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Role -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-info">
+
+                            <span class="profile-detail-label">
+                                Account Type
+                            </span>
+
+                            {% if user["role"] == "tourist" %}
+
+                            <span class="profile-role tourist-role">
+                                Tourist
+                            </span>
+
+                            {% elif user["role"] == "business" %}
+
+                            <span class="profile-role business-role">
+                                Local Business
+                            </span>
+
+                            {% else %}
+
+                            <span class="profile-role">
+                                Not Selected
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Member Since -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-info">
+
+                            <span class="profile-detail-label">
+                                Member Since
+                            </span>
+
+                            <strong>
+                                {{ user["created_at"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 QUICK ACTIONS
+                 ============================================= -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+
+                    <div>
+
+                        <h2>
+                            Quick Actions
+                        </h2>
+
+                        <p>
+                            Quickly access your travel tools.
+                        </p>
+
+                    </div>
+
+                    <span class="profile-card-icon">
+                        ⚡
+                    </span>
+
+                </div>
+
+
+                <div class="profile-actions">
+
+                    {% if user["role"] == "tourist" %}
+
+                    <!-- Plan Trip -->
+
+                    <a
+                        href="{{ url_for('plan_trip') }}"
+                        class="profile-action"
+                    >
+
+                        <span class="profile-action-icon">
+                            ✈
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Plan a Trip
+                            </strong>
+
+                            <small>
+                                Create a personalized trip
+                            </small>
+
+                        </div>
+
+                        <span class="profile-action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <!-- My Trips -->
+
+                    <a
+                        href="{{ url_for('my_trips') }}"
+                        class="profile-action"
+                    >
+
+                        <span class="profile-action-icon">
+                            🧳
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                My Trips
+                            </strong>
+
+                            <small>
+                                View your planned journeys
+                            </small>
+
+                        </div>
+
+                        <span class="profile-action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <!-- Places -->
+
+                    <a
+                        href="{{ url_for('places') }}"
+                        class="profile-action"
+                    >
+
+                        <span class="profile-action-icon">
+                            📍
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Explore Places
+                            </strong>
+
+                            <small>
+                                Discover places to visit
+                            </small>
+
+                        </div>
+
+                        <span class="profile-action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    {% elif user["role"] == "business" %}
+
+                    <!-- Business -->
+
+                    <a
+                        href="{{ url_for('business') }}"
+                        class="profile-action"
+                    >
+
+                        <span class="profile-action-icon">
+                            🏢
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                My Business
+                            </strong>
+
+                            <small>
+                                Manage your business listings
+                            </small>
+
+                        </div>
+
+                        <span class="profile-action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                    {% endif %}
+
+
+                    <!-- Emergency -->
+
+                    <a
+                        href="{{ url_for('emergency') }}"
+                        class="profile-action emergency-action"
+                    >
+
+                        <span class="profile-action-icon">
+                            🆘
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Emergency Help
+                            </strong>
+
+                            <small>
+                                Important emergency contacts
+                            </small>
+
+                        </div>
+
+                        <span class="profile-action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGOUT AREA
+             ================================================= -->
+
+        <div class="profile-logout">
+
+            <div>
+
+                <strong>
+                    Leaving Safar Setu?
+                </strong>
+
+                <p>
+                    You can safely logout from your account.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

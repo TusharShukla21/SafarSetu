@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Trips | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="my-trips-page">
+
+    <div class="container">
+
+        <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+        <div class="trip-page-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    YOUR TRAVEL PLANS
+                </span>
+
+                <h1>
+                    My Trips
+                </h1>
+
+                <p>
+                    View and manage all the trips you have
+                    planned with Safar Setu.
+                </p>
+
+            </div>
+
+            <div class="trip-header-icon">
+                🧳
+            </div>
+
+        </div>
+
+
+        {% if trips %}
+
+        <!-- ==========================================
+             TRIPS COUNT
+        =========================================== -->
+
+        <div class="my-trips-summary">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    TRIP SUMMARY
+                </span>
+
+                <h2>
+                    Your Planned Journeys
+                </h2>
+
+            </div>
+
+            <div class="my-trips-count">
+
+                <strong>
+                    {{ trips|length }}
+                </strong>
+
+                <span>
+                    planned trip{% if trips|length != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             TRIPS LIST
+        =========================================== -->
+
+        <div class="my-trips-list">
+
+            {% for trip in trips %}
+
+            <article class="my-trip-card">
+
+                <!-- CARD HEADER -->
+
+                <div class="my-trip-card-header">
+
+                    <div class="my-trip-route">
+
+                        <div class="my-trip-location">
+
+                            <span>
+                                FROM
+                            </span>
+
+                            <strong>
+                                {{ trip["source"] }}
+                            </strong>
+
+                        </div>
+
+                        <div class="my-trip-arrow">
+                            →
+                        </div>
+
+                        <div class="my-trip-location">
+
+                            <span>
+                                TO
+                            </span>
+
+                            <strong>
+                                {{ trip["destination"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="my-trip-status">
+
+                        {% if trip["status"] %}
+                            {{ trip["status"]|title }}
+                        {% else %}
+                            Planned
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <!-- TRIP DETAILS -->
+
+                <div class="my-trip-details">
+
+                    <div class="my-trip-detail">
+
+                        <span class="my-trip-detail-icon">
+                            📅
+                        </span>
+
+                        <div>
+
+                            <span>
+                                Travel Dates
+                            </span>
+
+                            <strong>
+                                {{ trip["start_date"] }}
+                                →
+                                {{ trip["end_date"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="my-trip-detail">
+
+                        <span class="my-trip-detail-icon">
+                            👥
+                        </span>
+
+                        <div>
+
+                            <span>
+                                Travellers
+                            </span>
+
+                            <strong>
+                                {{ trip["travellers"] }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="my-trip-detail">
+
+                        <span class="my-trip-detail-icon">
+                            💰
+                        </span>
+
+                        <div>
+
+                            <span>
+                                Budget
+                            </span>
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(trip["budget"]) }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if trip["estimated_cost"] is not none %}
+
+                    <div class="my-trip-detail">
+
+                        <span class="my-trip-detail-icon">
+                            🧮
+                        </span>
+
+                        <div>
+
+                            <span>
+                                Estimated Cost
+                            </span>
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(trip["estimated_cost"]) }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- COST COMPARISON -->
+
+                {% if trip["estimated_cost"] is not none %}
+
+                <div class="my-trip-budget-bar">
+
+                    <div class="my-trip-budget-header">
+
+                        <span>
+                            Budget Usage
+                        </span>
+
+                        {% if trip["budget"] > 0 %}
+
+                        <strong>
+                            {{ (
+                                (trip["estimated_cost"] / trip["budget"]) * 100
+                            )|round|int }}%
+                        </strong>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="my-trip-progress">
+
+                        {% if trip["budget"] > 0 %}
+
+                        {% set budget_percent =
+                            (trip["estimated_cost"] / trip["budget"]) * 100
+                        %}
+
+                        <div
+                            class="my-trip-progress-fill
+                            {% if budget_percent > 100 %}
+                                over-budget
+                            {% endif %}"
+                            style="width: {{ [budget_percent, 100]|min }}%;"
+                        ></div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if trip["estimated_cost"] <= trip["budget"] %}
+
+                    <p class="budget-within">
+                        ✓ Estimated cost is within your budget.
+                    </p>
+
+                    {% else %}
+
+                    <p class="budget-over">
+                        ⚠ Estimated cost is above your planned budget.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- CARD FOOTER -->
+
+                <div class="my-trip-card-footer">
+
+                    <span class="my-trip-created">
+
+                        Planned on
+                        {{ trip["created_at"][:10] if trip["created_at"] else "—" }}
+
+                    </span>
+
+
+                    <a
+                        href="{{ url_for(
+                            'plan_trip',
+                            destination=trip['destination']
+                        ) }}"
+                        class="btn btn-primary"
+                    >
+                        Plan Again
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ==========================================
+             PLAN ANOTHER TRIP
+        =========================================== -->
+
+        <div class="my-trips-bottom-card">
+
+            <div class="my-trips-bottom-icon">
+                ✈️
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    READY FOR ANOTHER JOURNEY?
+                </span>
+
+                <h3>
+                    Plan your next trip
+                </h3>
+
+                <p>
+                    Create a new itinerary based on your
+                    destination, dates and budget.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="btn btn-secondary"
+            >
+                Plan a Trip
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ==========================================
+             EMPTY STATE
+        =========================================== -->
+
+        <div class="my-trips-empty">
+
+            <div class="my-trips-empty-icon">
+                🧳
+            </div>
+
+            <span class="section-eyebrow">
+                NO TRIPS YET
+            </span>
+
+            <h2>
+                Your next adventure starts here
+            </h2>
+
+            <p>
+                You haven't planned any trips yet.
+                Create your first travel plan with
+                Safar Setu.
+            </p>
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="btn btn-primary"
+            >
+                Plan Your First Trip
+                <span>→</span>
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

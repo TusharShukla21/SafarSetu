@@ -1,0 +1,625 @@
+/* =========================================================
+   SAFAR SETU - AUTHENTICATION STYLES
+   ========================================================= */
+
+
+/* =========================================================
+   AUTH PAGE
+   ========================================================= */
+
+.auth-page {
+    min-height: calc(100vh - 160px);
+
+    display: flex;
+    align-items: center;
+
+    padding: 60px 20px;
+}
+
+.auth-container {
+    width: min(1050px, 94%);
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        1.1fr 0.9fr;
+
+    gap: 70px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   INTRO SECTION
+   ========================================================= */
+
+.auth-intro {
+    padding: 20px 0;
+}
+
+.auth-brand {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+    color: #2563eb;
+
+    font-size: 0.95rem;
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+}
+
+.auth-intro h1 {
+    max-width: 550px;
+
+    margin-bottom: 18px;
+
+    color: #111827;
+
+    font-size: clamp(
+        2.5rem,
+        5vw,
+        4.3rem
+    );
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+}
+
+.auth-intro h1 span {
+    color: #2563eb;
+}
+
+.auth-intro > p {
+    max-width: 520px;
+
+    margin-bottom: 30px;
+
+    color: #6b7280;
+
+    font-size: 1.05rem;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.auth-features {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.auth-feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.auth-feature span {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.auth-feature p {
+    color: #4b5563;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+.auth-card {
+    width: 100%;
+
+    max-width: 440px;
+
+    margin-left: auto;
+
+    padding: 38px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 50px rgba(
+            15,
+            23,
+            42,
+            0.08
+        );
+}
+
+.auth-card-header {
+    margin-bottom: 28px;
+}
+
+.auth-card-header h2 {
+    margin-bottom: 5px;
+
+    color: #111827;
+
+    font-size: 1.7rem;
+
+    line-height: 1.2;
+}
+
+.auth-card-header p {
+    color: #6b7280;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   AUTH FORM
+   ========================================================= */
+
+.auth-form {
+    width: 100%;
+}
+
+.password-label-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.auth-submit {
+    width: 100%;
+
+    margin-top: 5px;
+
+    padding: 13px 18px;
+}
+
+.auth-submit span {
+    font-size: 1.1rem;
+
+    transition:
+        transform 0.2s ease;
+}
+
+.auth-submit:hover span {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   AUTH SWITCH
+   ========================================================= */
+
+.auth-switch {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 25px;
+
+    color: #6b7280;
+
+    font-size: 0.85rem;
+}
+
+.auth-switch a {
+    color: #2563eb;
+
+    font-weight: 700;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .auth-page {
+        padding: 40px 15px;
+    }
+
+    .auth-container {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+
+    .auth-intro {
+        text-align: center;
+    }
+
+    .auth-intro h1 {
+        margin-left: auto;
+        margin-right: auto;
+
+        font-size: 2.7rem;
+    }
+
+    .auth-intro > p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .auth-features {
+        align-items: center;
+    }
+
+    .auth-card {
+        margin: auto;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .auth-intro h1 {
+        font-size: 2.25rem;
+
+        letter-spacing: -1px;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+
+        border-radius: 15px;
+    }
+
+}
+/* =========================================================
+   ROLE SELECTION
+   ========================================================= */
+
+.role-page {
+    width: min(850px, 94%);
+
+    margin: auto;
+}
+
+.role-header {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.role-header h1 {
+    margin-bottom: 10px;
+
+    color: #111827;
+
+    font-size: clamp(
+        2rem,
+        4vw,
+        3rem
+    );
+
+    line-height: 1.15;
+
+    letter-spacing: -1px;
+}
+
+.role-header h1 span {
+    color: #2563eb;
+}
+
+.role-header p {
+    color: #6b7280;
+
+    font-size: 0.95rem;
+}
+
+
+/* =========================================================
+   ROLE OPTIONS
+   ========================================================= */
+
+.role-options {
+    display: grid;
+
+    gap: 16px;
+}
+
+.role-card {
+    display: block;
+
+    cursor: pointer;
+}
+
+.role-card input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.role-card-content {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 24px;
+
+    background: white;
+
+    border: 2px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.role-card:hover .role-card-content {
+    border-color: #bfdbfe;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(
+            15,
+            23,
+            42,
+            0.06
+        );
+}
+
+.role-card input:checked
++ .role-card-content {
+    border-color: #2563eb;
+
+    background: #eff6ff;
+
+    box-shadow:
+        0 8px 25px rgba(
+            37,
+            99,
+            235,
+            0.1
+        );
+}
+
+
+/* =========================================================
+   ROLE ICON
+   ========================================================= */
+
+.role-icon {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 24px;
+}
+
+.business-icon {
+    background: #f3f4f6;
+
+    color: #111827;
+}
+
+.role-card input:checked
++ .role-card-content
+.business-icon {
+    background: #dbeafe;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   ROLE INFO
+   ========================================================= */
+
+.role-info {
+    flex: 1;
+}
+
+.role-info h2 {
+    margin-bottom: 4px;
+
+    color: #111827;
+
+    font-size: 1.2rem;
+}
+
+.role-info p {
+    max-width: 600px;
+
+    margin-bottom: 10px;
+
+    color: #6b7280;
+
+    font-size: 0.88rem;
+
+    line-height: 1.5;
+}
+
+.role-features {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.role-features span {
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    background: #f3f4f6;
+
+    color: #4b5563;
+
+    font-size: 0.72rem;
+
+    font-weight: 600;
+}
+
+.role-card input:checked
++ .role-card-content
+.role-features span {
+    background: white;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   RADIO INDICATOR
+   ========================================================= */
+
+.role-radio {
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #d1d5db;
+
+    border-radius: 50%;
+
+    color: transparent;
+
+    font-size: 0;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.role-card input:checked
++ .role-card-content
+.role-radio {
+    border: 7px solid #2563eb;
+
+    background: white;
+}
+
+
+/* =========================================================
+   CONTINUE BUTTON
+   ========================================================= */
+
+.role-submit {
+    display: flex;
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 13px 20px;
+}
+
+.role-submit span {
+    transition:
+        transform 0.2s ease;
+}
+
+.role-submit:hover span {
+    transform: translateX(4px);
+}
+
+
+/* =========================================================
+   ROLE MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .role-card-content {
+        align-items: flex-start;
+
+        padding: 18px;
+
+        gap: 14px;
+    }
+
+    .role-icon {
+        width: 48px;
+        height: 48px;
+
+        border-radius: 12px;
+
+        font-size: 20px;
+    }
+
+    .role-info h2 {
+        font-size: 1.05rem;
+    }
+
+    .role-info p {
+        font-size: 0.82rem;
+    }
+
+    .role-features {
+        display: none;
+    }
+
+}

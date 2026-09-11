@@ -1,0 +1,698 @@
+{% extends "base.html" %}
+
+{% block title %}
+Trip Plan | Safar Setu
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/trip.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+<section class="trip-result-page">
+    <div class="container">
+
+        <!-- =====================================================
+             RESULT HEADER
+             ===================================================== -->
+        <div class="result-header">
+            <div class="result-header-content">
+                <span class="section-eyebrow">
+                    YOUR TRIP PLAN
+                </span>
+
+                <h1>
+                    Your <span>{{ destination.name }}</span> trip is ready.
+                </h1>
+
+                <p>
+                    We combined transport, stay, food, local travel,
+                    activities, weather and your budget to create this
+                    trip estimate.
+                </p>
+            </div>
+
+            <div class="result-header-actions">
+                <a
+                    href="{{ url_for('plan_trip') }}"
+                    class="btn btn-outline"
+                >
+                    Plan Again
+                </a>
+
+                <a
+                    href="{{ url_for('my_trips') }}"
+                    class="btn btn-primary"
+                >
+                    My Trips
+                </a>
+            </div>
+        </div>
+
+
+        <!-- =====================================================
+             TRIP SUMMARY
+             ===================================================== -->
+        <div class="trip-summary-card">
+
+            <div class="trip-route">
+                <div class="trip-location">
+                    <span class="trip-location-label">
+                        STARTING FROM
+                    </span>
+                    <strong>{{ source }}</strong>
+                    <small>Your journey begins here</small>
+                </div>
+
+                <div class="trip-route-line">
+                    <span>→</span>
+                </div>
+
+                <div class="trip-location trip-location-destination">
+                    <span class="trip-location-label">
+                        DESTINATION
+                    </span>
+                    <strong>{{ destination.name }}</strong>
+                    <small>
+                        {% if destination.state %}
+                            {{ destination.state }}, {{ destination.country }}
+                        {% else %}
+                            {{ destination.country }}
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+
+            <div class="trip-summary-details">
+                <div class="summary-detail">
+                    <div class="summary-detail-icon">📅</div>
+                    <div>
+                        <small>TRAVEL DATES</small>
+                        <strong>{{ start_date }} → {{ end_date }}</strong>
+                    </div>
+                </div>
+
+                <div class="summary-detail">
+                    <div class="summary-detail-icon">☀</div>
+                    <div>
+                        <small>DURATION</small>
+                        <strong>
+                            {{ trip_days }} day{% if trip_days != 1 %}s{% endif %}
+                            · {{ nights }} night{% if nights != 1 %}s{% endif %}
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="summary-detail">
+                    <div class="summary-detail-icon">👥</div>
+                    <div>
+                        <small>TRAVELLERS</small>
+                        <strong>
+                            {{ travellers }} person{% if travellers != 1 %}s{% endif %}
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="summary-detail">
+                    <div class="summary-detail-icon">₹</div>
+                    <div>
+                        <small>YOUR BUDGET</small>
+                        <strong>₹{{ "{:,.0f}".format(budget) }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- =====================================================
+             SMART ALERTS
+             ===================================================== -->
+        {% if trip_alerts %}
+        <div class="trip-alerts">
+            {% for alert in trip_alerts %}
+                {% if alert.type == 'danger' %}
+                    <div class="budget-status-card budget-over">
+                        <div class="budget-status-icon">!</div>
+
+                        <div class="budget-status-content">
+                            <h2>{{ alert.title }}</h2>
+                            <p>{{ alert.message }}</p>
+                        </div>
+                    </div>
+                {% elif alert.type == 'warning' %}
+                    <div class="budget-status-card budget-over">
+                        <div class="budget-status-icon">!</div>
+
+                        <div class="budget-status-content">
+                            <h2>{{ alert.title }}</h2>
+                            <p>{{ alert.message }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="budget-status-card budget-within">
+                        <div class="budget-status-icon">✓</div>
+
+                        <div class="budget-status-content">
+                            <h2>{{ alert.title }}</h2>
+                            <p>{{ alert.message }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+        <!-- =====================================================
+             BUDGET STATUS
+             ===================================================== -->
+        {% if budget_status == 'within_budget' %}
+        <div class="budget-status-card budget-within">
+            <div class="budget-status-icon">✓</div>
+
+            <div class="budget-status-content">
+                <h2>Your trip fits the planned budget</h2>
+                <p>
+                    The current estimate is within your selected budget.
+                    Actual prices may change when you book.
+                </p>
+            </div>
+
+            <div class="budget-amount">
+                <span>ESTIMATED COST</span>
+                <strong>₹{{ "{:,.0f}".format(estimated_cost) }}</strong>
+            </div>
+        </div>
+        {% else %}
+        <div class="budget-status-card budget-over">
+            <div class="budget-status-icon">!</div>
+
+            <div class="budget-status-content">
+                <h2>Your trip is above the planned budget</h2>
+                <p>
+                    Consider choosing a cheaper transport option, stay or
+                    activities to bring the trip closer to your budget.
+                </p>
+            </div>
+
+            <div class="budget-amount">
+                <span>ESTIMATED COST</span>
+                <strong>₹{{ "{:,.0f}".format(estimated_cost) }}</strong>
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- =====================================================
+             COST + TRANSPORT
+             ===================================================== -->
+        <div class="result-grid">
+
+            <!-- COST BREAKDOWN -->
+            <article class="result-card">
+                <div class="result-card-header">
+                    <div>
+                        <span class="result-card-eyebrow">
+                            BUDGET
+                        </span>
+                        <h2>Estimated trip cost</h2>
+                        <p>
+                            A simple breakdown of the major expenses in your plan.
+                        </p>
+                    </div>
+
+                    <div class="result-card-icon">₹</div>
+                </div>
+
+                <div class="cost-list">
+                    <div class="cost-row">
+                        <div>
+                            <span class="cost-label">Transport</span>
+                            <small>From {{ source }} to {{ destination.name }}</small>
+                        </div>
+                        <strong>₹{{ "{:,.0f}".format(travel_cost) }}</strong>
+                    </div>
+
+                    <div class="cost-row">
+                        <div>
+                            <span class="cost-label">Stay</span>
+                            <small>{{ nights }} night{% if nights != 1 %}s{% endif %}</small>
+                        </div>
+                        <strong>₹{{ "{:,.0f}".format(stay_cost) }}</strong>
+                    </div>
+
+                    <div class="cost-row">
+                        <div>
+                            <span class="cost-label">Food</span>
+                            <small>Estimated for {{ travellers }} traveller{% if travellers != 1 %}s{% endif %}</small>
+                        </div>
+                        <strong>₹{{ "{:,.0f}".format(food_cost) }}</strong>
+                    </div>
+
+                    <div class="cost-row">
+                        <div>
+                            <span class="cost-label">Local travel</span>
+                            <small>Estimated within the destination</small>
+                        </div>
+                        <strong>₹{{ "{:,.0f}".format(local_travel_cost) }}</strong>
+                    </div>
+
+                    <div class="cost-row">
+                        <div>
+                            <span class="cost-label">Activities</span>
+                            <small>Recommended experiences</small>
+                        </div>
+                        <strong>₹{{ "{:,.0f}".format(recommendations.activity_cost) }}</strong>
+                    </div>
+                </div>
+
+                <div class="cost-total">
+                    <span>Estimated total</span>
+                    <strong>₹{{ "{:,.0f}".format(estimated_cost) }}</strong>
+                </div>
+            </article>
+
+
+            <!-- TRANSPORT -->
+            <article class="result-card">
+                <div class="result-card-header">
+                    <div>
+                        <span class="result-card-eyebrow">
+                            TRAVEL
+                        </span>
+                        <h2>Recommended transport</h2>
+                        <p>
+                            Compare the available ways to reach your destination.
+                        </p>
+                    </div>
+
+                    <div class="result-card-icon">🚆</div>
+                </div>
+
+                {% if cheapest_transport %}
+                <div class="recommended-option">
+                    <span class="recommended-badge">
+                        LOWEST AVAILABLE PRICE
+                    </span>
+
+                    <div class="recommended-main">
+                        <div class="recommended-icon">
+                            {% if cheapest_transport.mode|lower == 'flight' %}
+                                ✈
+                            {% elif cheapest_transport.mode|lower == 'train' %}
+                                🚆
+                            {% elif cheapest_transport.mode|lower == 'bus' %}
+                                🚌
+                            {% elif cheapest_transport.mode|lower == 'taxi' %}
+                                🚕
+                            {% else %}
+                                🚗
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <h3>{{ cheapest_transport.mode }}</h3>
+                            <p>
+                                {{ cheapest_transport.provider or 'Available option' }}
+                                {% if cheapest_transport.duration %}
+                                    · {{ cheapest_transport.duration }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="recommended-price">
+                        <strong>
+                            ₹{{ "{:,.0f}".format(cheapest_transport.price) }}
+                        </strong>
+                        <small>per traveller</small>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if transport_options %}
+                <div class="option-list">
+                    {% for option in transport_options %}
+                    <div class="travel-option">
+                        <div class="travel-option-main">
+                            <div class="travel-option-icon">
+                                {% if option.mode|lower == 'flight' %}
+                                    ✈
+                                {% elif option.mode|lower == 'train' %}
+                                    🚆
+                                {% elif option.mode|lower == 'bus' %}
+                                    🚌
+                                {% elif option.mode|lower == 'taxi' %}
+                                    🚕
+                                {% else %}
+                                    🚗
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <strong>{{ option.mode }}</strong>
+                                <small>
+                                    {{ option.provider or 'Provider not specified' }}
+                                    {% if option.availability %}
+                                        · {{ option.availability }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="travel-option-price">
+                            <strong>₹{{ "{:,.0f}".format(option.price) }}</strong>
+                            {% if option.duration %}
+                                <small>{{ option.duration }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="result-empty">
+                    <span>🚆</span>
+                    <h3>No transport options found</h3>
+                    <p>
+                        Try another source location or check the Travel section
+                        for alternatives.
+                    </p>
+                </div>
+                {% endif %}
+
+                <a
+                    href="{{ url_for('travel', source=source, destination=destination.name) }}"
+                    class="result-link"
+                >
+                    Explore transport options →
+                </a>
+            </article>
+        </div>
+
+
+        <!-- =====================================================
+             STAY + WEATHER
+             ===================================================== -->
+        <div class="result-grid">
+
+            <!-- STAY -->
+            <article class="result-card">
+                <div class="result-card-header">
+                    <div>
+                        <span class="result-card-eyebrow">
+                            STAY
+                        </span>
+                        <h2>Recommended stay</h2>
+                        <p>
+                            A stay selected from the available options for your destination.
+                        </p>
+                    </div>
+
+                    <div class="result-card-icon">🛏</div>
+                </div>
+
+                {% if cheapest_stay %}
+                <div class="stay-result">
+                    <div class="stay-result-image">
+                        {% if cheapest_stay.image_url %}
+                            <img
+                                src="{{ cheapest_stay.image_url }}"
+                                alt="{{ cheapest_stay.name }}"
+                            >
+                        {% else %}
+                            🏨
+                        {% endif %}
+                    </div>
+
+                    <div class="stay-result-content">
+                        <span class="stay-type">
+                            {{ cheapest_stay.type }}
+                        </span>
+
+                        <h3>{{ cheapest_stay.name }}</h3>
+
+                        <p class="stay-location">
+                            {{ cheapest_stay.location or destination.name }}
+                        </p>
+
+                        <div class="stay-meta">
+                            <span>
+                                {% if cheapest_stay.rating %}
+                                    ★ {{ cheapest_stay.rating }}
+                                {% else %}
+                                    ★ Recommended
+                                {% endif %}
+                            </span>
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(cheapest_stay.price_per_night) }}
+                                <small>/ night</small>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stay-cost-summary">
+                    <span>
+                        {{ rooms }} room{% if rooms != 1 %}s{% endif %} · {{ nights }} night{% if nights != 1 %}s{% endif %}
+                    </span>
+                    <strong>₹{{ "{:,.0f}".format(stay_cost) }}</strong>
+                </div>
+
+                <a
+                    href="{{ url_for('stay', destination=destination.name, budget=budget) }}"
+                    class="result-link"
+                >
+                    Compare stays and prices →
+                </a>
+                {% else %}
+                <div class="result-empty">
+                    <span>🛏</span>
+                    <h3>No stay found</h3>
+                    <p>
+                        No stored stay is available for this destination right now.
+                    </p>
+                </div>
+                {% endif %}
+            </article>
+
+
+            <!-- WEATHER -->
+            <article class="result-card">
+                <div class="result-card-header">
+                    <div>
+                        <span class="result-card-eyebrow">
+                            WEATHER
+                        </span>
+                        <h2>Current weather</h2>
+                        <p>
+                            Latest available weather information for your destination.
+                        </p>
+                    </div>
+
+                    <div class="result-card-icon">☀</div>
+                </div>
+
+                {% if weather %}
+                <div class="weather-result">
+                    <div class="weather-main">
+                        <div class="weather-temperature">
+                            {{ weather.temperature }}°
+                        </div>
+
+                        <div>
+                            <strong>
+                                {{ weather.city }}{% if weather.country %}, {{ weather.country }}{% endif %}
+                            </strong>
+                            <p>{{ weather.description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-details">
+                        <div>
+                            <span>Feels like</span>
+                            <strong>{{ weather.feels_like }}°C</strong>
+                        </div>
+
+                        <div>
+                            <span>Humidity</span>
+                            <strong>{{ weather.humidity }}%</strong>
+                        </div>
+
+                        <div>
+                            <span>Wind</span>
+                            <strong>{{ weather.wind_speed }} m/s</strong>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="result-empty">
+                    <span>☁</span>
+                    <h3>Weather unavailable</h3>
+                    <p>
+                        Weather information could not be loaded right now.
+                        You can continue planning your trip.
+                    </p>
+                </div>
+                {% endif %}
+            </article>
+        </div>
+
+
+        <!-- =====================================================
+             PLACES & RECOMMENDATIONS
+             ===================================================== -->
+        <article class="result-card places-result-card">
+            <div class="result-card-header">
+                <div>
+                    <span class="result-card-eyebrow">
+                        EXPERIENCES
+                    </span>
+                    <h2>Recommended places to visit</h2>
+                    <p>
+                        Places are ranked using your selected interests and available budget.
+                    </p>
+                </div>
+
+                <div class="result-card-icon">📍</div>
+            </div>
+
+            <div class="activity-budget">
+                <div>
+                    <span>ACTIVITY BUDGET</span>
+                    <strong>₹{{ "{:,.0f}".format(recommendations.activity_cost) }}</strong>
+                </div>
+
+                <div>
+                    <span>PLACES SELECTED</span>
+                    <strong>{{ recommendations.places|length }}</strong>
+                </div>
+
+                <div>
+                    <span>BEST TIME</span>
+                    <strong>{{ destination.best_time or 'Not specified' }}</strong>
+                </div>
+            </div>
+
+            {% if recommendations.places %}
+            <div class="places-result-grid">
+                {% for place in recommendations.places %}
+                <article class="place-result-card">
+                    <div class="place-result-image">
+                        {% if place.image_url %}
+                            <img
+                                src="{{ place.image_url }}"
+                                alt="{{ place.name }}"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="place-placeholder">📍</div>
+                        {% endif %}
+
+                        <span class="place-category">
+                            {{ place.category }}
+                        </span>
+                    </div>
+
+                    <div class="place-result-content">
+                        <div class="place-title-row">
+                            <h3>{{ place.name }}</h3>
+
+                            {% if place.rating %}
+                            <span class="place-rating">
+                                ★ {{ place.rating }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <p>
+                            {{ place.description or 'Explore this experience in ' ~ destination.name ~ '.' }}
+                        </p>
+
+                        <div class="place-result-meta">
+                            <span>
+                                {% if place.entry_fee and place.entry_fee > 0 %}
+                                    Entry ₹{{ "{:,.0f}".format(place.entry_fee) }}
+                                {% else %}
+                                    Free entry
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <a
+                            href="{{ place.maps_url or url_for('map_link', place_name=place.name, location=destination.name) }}"
+                            target="_blank"
+                            class="place-map-link"
+                        >
+                            View on Maps →
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="result-empty places-empty">
+                <span>📍</span>
+                <h3>No recommendations available</h3>
+                <p>
+                    We could not find matching places for the selected preferences.
+                </p>
+            </div>
+            {% endif %}
+        </article>
+
+
+        <!-- =====================================================
+             MAP
+             ===================================================== -->
+        <div class="map-result-card">
+            <div class="map-result-content">
+                <span class="result-card-eyebrow">
+                    DESTINATION MAP
+                </span>
+
+                <h2>Explore {{ destination.name }} on Google Maps</h2>
+
+                <p>
+                    Open the destination directly in Google Maps to explore
+                    nearby places, directions and other useful locations.
+                </p>
+
+                <a
+                    href="{{ destination_maps_url }}"
+                    target="_blank"
+                    class="btn btn-primary"
+                >
+                    Open Google Maps →
+                </a>
+            </div>
+
+            <div class="map-result-icon">📍</div>
+        </div>
+
+
+        <!-- =====================================================
+             BOTTOM ACTIONS
+             ===================================================== -->
+        <div class="result-bottom-actions">
+            <a
+                href="{{ url_for('emergency') }}"
+                class="btn btn-outline"
+            >
+                Emergency Help
+            </a>
+
+            <a
+                href="{{ url_for('plan_trip') }}"
+                class="btn btn-primary"
+            >
+                Plan Another Trip →
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
